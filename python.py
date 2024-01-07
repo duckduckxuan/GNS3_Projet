@@ -2,18 +2,14 @@ import gns3fy
 import requests
 from requests.auth import HTTPBasicAuth
 
-# GNS3 服务器地址和端口
+# GNS3 server address & host
 server_url = "http://localhost:3080"
 
-# 用户名和密码（如果有设置的话）
-
-
-
-# 创建 GNS3 服务器对象
+# create GNS3 server
 server = gns3fy.Gns3Connector(server_url)
 
 try:
-    # 发送请求并包含基本认证
+    # send request and check
     response = requests.get(f"{server_url}/v2/version")
     response.raise_for_status()
     print("连接成功")
