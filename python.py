@@ -1,32 +1,20 @@
 import gns3fy
+import requests
 
-# Define the server object to establish the connection
-gns3_server = gns3fy.Gns3Connector("http://<server address>:3080")
+# 创建 GNS3 服务器对象
+server = gns3fy.Gns3Connector("http://localhost:3080")
 
-# Define the lab you want to load and assign the server connector
-lab = gns3fy.Project(name="API_TEST", connector=gns3_server)
-
-# Retrieve its information and display
-lab.get()
-print(lab)
-"Project(project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', name='API_TEST', status='opened', ...)"
-
-# Access the project attributes
-print(f"Name: {lab.name} -- Status: {lab.status} -- Is auto_closed?: {lab.auto_close}")
-"Name: API_TEST -- Status: closed -- Is auto_closed?: False"
-
-# Open the project
-lab.open()
-lab.status
-opened
-
-# Verify the stats
-lab.stats
-{'drawings': 0, 'links': 4, 'nodes': 6, 'snapshots': 0}
-
-# List the names and status of all the nodes in the project
-for node in lab.nodes:
-    print(f"Node: {node.name} -- Node Type: {node.node_type} -- Status: {node.status}")
-
-"Node: Ethernetswitch-1 -- Node Type: ethernet_switch -- Status: started"
-...
+try:
+    response = requests.get('http://127.0.0.1:3080/v2/version')
+    response.raise_for_status()  # 如果响应状态不是 200，将引发 HTTPError 异常
+    print("连接成功")
+    # 打印 GNS3 服务器版本
+    print(f"GNS3 服务器版本: {response.json()['version']}")
+except requests.exceptions.HTTPError as e:
+    print(f"连接失败，HTTP 错误: {e}")
+except requests.exceptions.ConnectionError:
+    print("连接失败，无法连接到服务器")
+except requests.exceptions.Timeout:
+    print("连接失败，请求超时")
+except requests.exceptions.RequestException as e:
+    print(f"连接失败，错误: {e}")
