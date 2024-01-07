@@ -12,13 +12,13 @@ try:
     # send request and check
     response = requests.get(f"{server_url}/v2/version")
     response.raise_for_status()
-    print("连接成功")
-    print(f"GNS3 服务器版本: {response.json()['version']}")
+    print("connection ok")
+    print(f"GNS3 version: {response.json()['version']}")
 except requests.exceptions.HTTPError as e:
-    print(f"连接失败，HTTP 错误: {e}")
+    print(f"error, HTTP error: {e}")
 except requests.exceptions.ConnectionError:
-    print("连接失败，无法连接到服务器")
+    print("error, can't connect to the server")
 except requests.exceptions.Timeout:
-    print("连接失败，请求超时")
+    print("error, request timed out")
 except requests.exceptions.RequestException as e:
-    print(f"连接失败，错误: {e}")
+    print(f"connection failed, error: {e}")
