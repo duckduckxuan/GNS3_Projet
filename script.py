@@ -1,6 +1,13 @@
 from gns3fy import Gns3Connector, Project, Node, Link
 import requests
+import os
+import json
 
+# Load json file
+file = os.path.join(os.path.dirname(__file__), 'router_info.json')
+with open(file, 'r') as f:
+    # Carga los datos JSON desde el archivo
+    data = json.load(f)
 
 # Create GNS3 server object
 server_url = "http://localhost:3080"
@@ -23,7 +30,7 @@ except requests.exceptions.RequestException as e:
     print(f"Connection failed, error: {e}")
 
 
-
+"""
 # Get all templates ID in the GNS3
 try:
     response = requests.get(f"{server_url}/v2/templates")
@@ -39,7 +46,7 @@ except requests.exceptions.Timeout:
     print("Timeout error")
 except Exception as e:
     print(f"An error occurred: {e}")
-
+"""
 
 
 # Create or get the project
@@ -52,5 +59,18 @@ except Exception as e:
     exit()
 
 # Create nodes in the project
-node1 = Node(project_id=project.project_id, name="R1", node_type="dynamips", connector=server)
-node2 = Node(project_id=project.project_id, name="R2", node_type="dynamips", connector=server)
+template_id = "77e90525-2ffb-4b4e-91ec-3d3c86f76392"
+for as_name, as_info in data['system'].items():
+    for router_name in as_info['router']:
+        # 创建节点
+        node = Node(project_id=project.project_id, name=router_name, node_type="dynamips", connector=server, template_id=template_id)
+        
+        # 先创建节点，然后启动
+        node.create()
+        node.start()
+
+        # 保存 GNS3 节点 ID 到您的数据结构中
+        as_info['router'][router_name]['gns3_id'] = node.node_id
+
+        # 打印信息以确认操作
+        print(f"Node {router_name} created and started with Node ID: {node.node_id}")
