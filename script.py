@@ -46,8 +46,22 @@ except Exception as e:
 project = gns3fy.Project(name="projet_gns3", connector=server)
 try:
     project.get()
-except Exception:
-    project.create()
+    print("project loaded successfully")
+except Exception as e:
+    print(f"failed to load project: {e}")
+    exit()
+
+# Now, get all nodes in this project
+try:
+    nodes = project.get_nodes()
+    if nodes is None:
+        print("No nodes found in project")
+    else:
+        # Iterate over nodes and do something with them
+        for node in nodes:
+            print(f"Node Name: {node.name}, Node ID: {node.node_id}")
+except Exception as e:
+    print(f"Failed to get nodes from project: {e}")
 
 
 # Create some new nodes in the project
@@ -61,6 +75,7 @@ for i in range (6):
         print(f"Failed to create node: {e}")
 """
 
+''''
 node1 = gns3fy.Node(project_id=project.project_id, name="R1", node_type="dynamips", template_id="77e90525-2ffb-4b4e-91ec-3d3c86f76392", connector=server)
 
 node2 = gns3fy.Node(project_id=project.project_id, name="R2", node_type="dynamips", template_id="77e90525-2ffb-4b4e-91ec-3d3c86f76392", connector=server)
@@ -79,3 +94,4 @@ link = gns3fy.Link(project_id=project.project_id, nodes=[node1, node2], node_int
 # 获取连接信息
 link.get()
 print(f"Link created between {node1.name} and {node2.name}")
+'''
