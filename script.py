@@ -53,4 +53,5 @@ except Exception as e:
 
 # Create nodes in the project
 node1 = Node(project_id=project.project_id, name="R1", node_type="dynamips", template_id="77e90525-2ffb-4b4e-91ec-3d3c86f76392", connector=server)
+node1.create()
 node1.start()
