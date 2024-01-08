@@ -1,0 +1,17 @@
+RIP:
+Router> enable
+Router# configure terminal
+Router(config)# ipv6 unicast-routing
+Router(config)# end
+Router#
+
+Router(config)# interface name number
+Router(config-if)# ipv6 enable
+Router(config-if)# ipv6 address ipv6-address/prefix-length
+Router(config-if)# no shutdown
+
+interface: show ipv6 interface
+
+routing table:
+Router# show ipv6 route (on Cisco)
+route -A inet6 (on Linux)
