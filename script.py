@@ -67,5 +67,4 @@ for as_name, as_info in data['system'].items():
         node = Node(project_id=project.project_id, name=router_name, node_type="dynamips", connector=server, template_id=template_id)
         node.create()
         node.start()
-
         print(f"Node {router_name} created and started with Node ID: {node.node_id}")
