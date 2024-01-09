@@ -1,4 +1,4 @@
-<h1>RIP</h1>
+<h1>IPv6 Adresse configuration</h1>
 Router> enable <br>  
 Router# configure terminal <br>
 Router(config)# ipv6 unicast-routing<br>
@@ -16,6 +16,10 @@ routing table:<br>
 Router# show ipv6 route (on Cisco)<br>
 route -A inet6 (on Linux)
 
+<h1>RIP</h1>
+Router(config)# ipv6 router rip process name<br>
+Router(config-rtr)# redistribute connected<br>
+Router(config-if)# ipv6 rip process name enable<br>
 
 <h1>OSPF</h1>
 
