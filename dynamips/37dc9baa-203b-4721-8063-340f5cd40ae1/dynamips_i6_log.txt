@@ -1,0 +1,34 @@
+Jan 09 13:51:14.042 HYPERVISOR: Release 0.2.17-x86/Windows (tag 2017072410)
+Jan 09 13:51:14.043 HYPERVISOR: Started on IP = localhost, TCP port = 57527.
+Jan 09 13:51:14.553 HYPERVISOR: exec_cmd: hypervisor version 
+Jan 09 13:51:14.555 HYPERVISOR: exec_cmd: hypervisor working_dir C:\Users\cappe\Desktop\test\project-files\dynamips 
+Jan 09 13:51:14.555 GENERAL: working_dir=C:\Users\cappe\Desktop\test\project-files\dynamips
+Jan 09 13:51:14.556 HYPERVISOR: exec_cmd: hypervisor working_dir C:\Users\cappe\Desktop\test\project-files\dynamips\37dc9baa-203b-4721-8063-340f5cd40ae1 
+Jan 09 13:51:14.556 GENERAL: working_dir=C:\Users\cappe\Desktop\test\project-files\dynamips\37dc9baa-203b-4721-8063-340f5cd40ae1
+Jan 09 13:51:14.565 HYPERVISOR: exec_cmd: vm create R6 6 c7200 
+Jan 09 13:51:14.567 VM: VM R6 created.
+Jan 09 13:51:14.568 HYPERVISOR: exec_cmd: vm set_con_tcp_port R6 5005 
+Jan 09 13:51:14.568 HYPERVISOR: exec_cmd: c7200 get_mac_addr R6 
+Jan 09 13:51:14.568 HYPERVISOR: exec_cmd: vm get_status R6 
+Jan 09 13:51:14.568 HYPERVISOR: exec_cmd: vm slot_add_binding R6 0 0 C7200-IO-FE 
+Jan 09 13:51:14.569 HYPERVISOR: exec_cmd: vm set_disk0 R6 0 
+Jan 09 13:51:14.570 HYPERVISOR: exec_cmd: vm set_exec_area R6 64 
+Jan 09 13:51:14.571 HYPERVISOR: exec_cmd: vm set_ios R6 C:/Users/cappe/GNS3/images/IOS/c7200-advipservicesk9-mz.152-4.S5.image 
+Jan 09 13:51:14.571 HYPERVISOR: exec_cmd: c7200 set_mac_addr R6 ca06.37f8.0000 
+Jan 09 13:51:14.572 HYPERVISOR: exec_cmd: vm set_nvram R6 512 
+Jan 09 13:51:14.572 HYPERVISOR: exec_cmd: vm set_ram R6 512 
+Jan 09 13:51:14.573 HYPERVISOR: exec_cmd: vm get_status R6 
+Jan 09 13:51:14.573 HYPERVISOR: exec_cmd: vm slot_add_binding R6 1 0 PA-GE 
+Jan 09 13:51:14.573 HYPERVISOR: exec_cmd: vm get_status R6 
+Jan 09 13:51:14.573 HYPERVISOR: exec_cmd: vm slot_add_binding R6 2 0 PA-GE 
+Jan 09 13:51:14.574 HYPERVISOR: exec_cmd: vm get_status R6 
+Jan 09 13:51:14.574 HYPERVISOR: exec_cmd: vm slot_add_binding R6 3 0 PA-GE 
+Jan 09 13:51:16.417 HYPERVISOR: exec_cmd: nio create_udp udp-cdf5e59a-8188-41cc-8abe-cd9822dffe0a 10028 127.0.0.1 10029 
+Jan 09 13:51:16.748 HYPERVISOR: exec_cmd: vm slot_add_nio_binding R6 0 0 udp-cdf5e59a-8188-41cc-8abe-cd9822dffe0a 
+Jan 09 13:51:16.749 HYPERVISOR: exec_cmd: vm get_status R6 
+Jan 09 13:51:21.180 HYPERVISOR: exec_cmd: vm set_ghost_status R6 2 
+Jan 09 13:51:21.187 HYPERVISOR: exec_cmd: vm set_ghost_file R6 C:\Users\cappe\Desktop\test\project-files\dynamips\c7200-advipservicesk9-mz.152-4.S5.image-512.ghost 
+Jan 09 13:51:21.187 HYPERVISOR: exec_cmd: vm get_status R6 
+Jan 09 13:51:21.195 HYPERVISOR: exec_cmd: vm set_config R6 configs\i6_startup-config.cfg configs\i6_private-config.cfg 
+Jan 09 13:51:21.195 HYPERVISOR: exec_cmd: vm start R6 
+Jan 09 13:51:51.513 HYPERVISOR: exec_cmd: vm extract_config R6 
