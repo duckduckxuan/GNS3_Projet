@@ -74,7 +74,7 @@
                             "neighbor_interface": "GigabitEthernet2/0"
                         }
                     ]
-                }，
+                },
                 {
                     "name": "R4",
                     "type": "iBGP",
