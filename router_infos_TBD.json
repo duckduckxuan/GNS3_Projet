@@ -3,7 +3,7 @@
         {
             "number": "111",
             "IP_range": "2001:192:168:0::/64",
-            "loopback_range": "2001:DB8:x::1/128",
+            "loopback_range": "2001:DB8::/64",
             "protocol": "RIP",
             "routers": [
                  {
@@ -163,7 +163,7 @@
         {
             "number": "112",
             "IP_range": "2001:192:169:0::/64",
-            "loopback_range": "2001:DB8:x::1/128",
+            "loopback_range": "2001:DB8::/64",
             "protocol": "OSPF",
             "routers": [
                 {
