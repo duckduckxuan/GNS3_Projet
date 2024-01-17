@@ -9,7 +9,6 @@
                  {
                     "name": "R1",
                     "type": "iBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:1::1/128",
                     "interfaces": [
                         {
@@ -29,7 +28,6 @@
                 {
                     "name": "R2",
                     "type": "iBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:2::1/128",
                     "interfaces": [
                         {
@@ -55,7 +53,6 @@
                 {
                     "name": "R3",
                     "type": "iBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:3::1/128",
                     "interfaces": [
                         {
@@ -81,7 +78,6 @@
                 {
                     "name": "R4",
                     "type": "iBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:4::1/128",
                     "interfaces": [
                         {
@@ -113,7 +109,6 @@
                 {
                     "name": "R5",
                     "type": "iBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:5::1/128",
                     "interfaces": [
                         {
@@ -145,7 +140,6 @@
                 {
                     "name": "R6",
                     "type": "eBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:6::1/128",
                     "interfaces": [
                         {
@@ -171,7 +165,6 @@
                 {
                     "name": "R7",
                     "type": "eBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:7::1/128",
                     "interfaces": [
                         {
@@ -199,13 +192,12 @@
         {
             "number": "112",
             "IP_range": "2001:192:169:0::/64",
-            "loopback_range": "2001:DB8:8::/128",
+            "loopback_range": "2001:DB8::/128",
             "protocol": "OSPF",
             "routers": [
                 {
                     "name": "R8",
                     "type": "eBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:8::1/128",
                     "interfaces": [
                         {
@@ -231,7 +223,6 @@
                 {
                     "name": "R9",
                     "type": "eBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:9::1/128",
                     "interfaces": [
                         {
@@ -257,7 +248,6 @@
                 {
                     "name": "R10",
                     "type": "iBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:10::1/128",
                     "interfaces": [
                         {
@@ -289,7 +279,6 @@
                 {
                     "name": "R11",
                     "type": "iBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:11::1/128",
                     "interfaces": [
                         {
@@ -321,7 +310,6 @@
                 {
                     "name": "R12",
                     "type": "iBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:12::1/128",
                     "interfaces": [
                         {
@@ -347,7 +335,6 @@
                 {
                     "name": "R13",
                     "type": "iBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:13::1/128",
                     "interfaces": [
                         {
@@ -373,7 +360,6 @@
                 {
                     "name": "R14",
                     "type": "iBGP",
-                    "bgp_preference": 100,
                     "loopback": "2001:DB8:14::1/128",
                     "interfaces": [
                         {
