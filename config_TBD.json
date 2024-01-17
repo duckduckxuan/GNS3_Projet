@@ -1,0 +1,382 @@
+{
+    "AS": [
+        {
+            "number": "111",
+            "IP_range": "2001:192:168:0::/64",
+            "loopback_range": "2001:DB8:x::1/128",
+            "protocol": "RIP",
+            "routers": [
+                 {
+                    "name": "R1",
+                    "type": "iBGP",
+                    "loopback": "2001:DB8:1::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:168:1::1/64",
+                            "neighbor": "R2",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:168:2::1/64",
+                            "neighbor": "R3",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R2",
+                    "type": "iBGP",
+                    "loopback": "2001:DB8:2::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:168:1::2/64",
+                            "neighbor": "R1",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:168:4::1/64",
+                            "neighbor": "R4",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "ip_address": "2001:192:168:3::1/64",
+                            "neighbor": "R3",
+                            "neighbor_interface": "GigabitEthernet2/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R3",
+                    "type": "iBGP",
+                    "loopback": "2001:DB8:3::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:168:5::1/64",
+                            "neighbor": "R5",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:168:2::2/64",
+                            "neighbor": "R1",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "ip_address": "2001:192:168:3::2/64",
+                            "neighbor": "R2",
+                            "neighbor_interface": "GigabitEthernet2/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R4",
+                    "type": "iBGP",
+                    "loopback": "2001:DB8:4::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:168:7::1/64",
+                            "neighbor": "R6",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:168:4::2/64",
+                            "neighbor": "R2",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "ip_address": "2001:192:168:6::1/64",
+                            "neighbor": "R5",
+                            "neighbor_interface": "GigabitEthernet2/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "ip_address": "2001:192:168:8::1/64",
+                            "neighbor": "R7",
+                            "neighbor_interface": "GigabitEthernet3/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R5",
+                    "type": "iBGP",
+                    "loopback": "2001:DB8:5::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:168:5::2/64",
+                            "neighbor": "R3",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:168:10::1/64",
+                            "neighbor": "R7",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "ip_address": "2001:192:168:6::2/64",
+                            "neighbor": "R4",
+                            "neighbor_interface": "GigabitEthernet2/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "ip_address": "2001:192:168:9::1/64",
+                            "neighbor": "R6",
+                            "neighbor_interface": "GigabitEthernet3/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R6",
+                    "type": "eBGP",
+                    "loopback": "2001:DB8:6::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:168:7::2/64",
+                            "neighbor": "R4",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:170:1::1/64",
+                            "neighbor": "R8",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "ip_address": "2001:192:168:9::2/64",
+                            "neighbor": "R5",
+                            "neighbor_interface": "GigabitEthernet3/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R7",
+                    "type": "eBGP",
+                    "loopback": "2001:DB8:7::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:170:2::1/64",
+                            "neighbor": "R9",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:168:10::2/64",
+                            "neighbor": "R5",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "ip_address": "2001:192:168:8::2/64",
+                            "neighbor": "R4",
+                            "neighbor_interface": "GigabitEthernet3/0"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "number": "112",
+            "IP_range": "2001:192:169:0::/64",
+            "loopback_range": "2001:DB8:x::1/128",
+            "protocol": "OSPF",
+            "routers": [
+                {
+                    "name": "R8",
+                    "type": "eBGP",
+                    "loopback": "2001:DB8:8::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:169:1::1/64",
+                            "neighbor": "R10",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:170:1::2/64",
+                            "neighbor": "R6",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "ip_address": "2001:192:169:2::1/64",
+                            "neighbor": "R11",
+                            "neighbor_interface": "GigabitEthernet2/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R9",
+                    "type": "eBGP",
+                    "loopback": "2001:DB8:9::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:170:2::2/64",
+                            "neighbor": "R7",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:169:4::1/64",
+                            "neighbor": "R11",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "ip_address": "2001:192:169:3::1/64",
+                            "neighbor": "R10",
+                            "neighbor_interface": "GigabitEthernet2/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R10",
+                    "type": "iBGP",
+                    "loopback": "2001:DB8:10::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:169:1::2/64",
+                            "neighbor": "R8",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:169:6::1/64",
+                            "neighbor": "R12",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "ip_address": "2001:192:169:3::2/64",
+                            "neighbor": "R9",
+                            "neighbor_interface": "GigabitEthernet2/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "ip_address": "2001:192:169:5::1/64",
+                            "neighbor": "R11",
+                            "neighbor_interface": "GigabitEthernet3/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R11",
+                    "type": "iBGP",
+                    "loopback": "2001:DB8:11::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:169:7::1/64",
+                            "neighbor": "R13",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:169:4::2/64",
+                            "neighbor": "R9",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "ip_address": "2001:192:169:2::2/64",
+                            "neighbor": "R8",
+                            "neighbor_interface": "GigabitEthernet2/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "ip_address": "2001:192:169:5::2/64",
+                            "neighbor": "R10",
+                            "neighbor_interface": "GigabitEthernet3/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R12",
+                    "type": "iBGP",
+                    "loopback": "2001:DB8:12::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:169:9::1/64",
+                            "neighbor": "R14",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:169:6::2/64",
+                            "neighbor": "R10",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "ip_address": "2001:192:169:8::1/64",
+                            "neighbor": "R13",
+                            "neighbor_interface": "GigabitEthernet2/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R13",
+                    "type": "iBGP",
+                    "loopback": "2001:DB8:13::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:169:7::2/64",
+                            "neighbor": "R11",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:169:10::1/64",
+                            "neighbor": "R14",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "ip_address": "2001:192:169:8::2/64",
+                            "neighbor": "R12",
+                            "neighbor_interface": "GigabitEthernet2/0"
+                        }
+                    ]
+                },
+                {
+                    "name": "R14",
+                    "type": "iBGP",
+                    "loopback": "2001:DB8:14::1/128",
+                    "interfaces": [
+                        {
+                            "name": "FastEthernet0/0",
+                            "ip_address": "2001:192:169:9::2/64",
+                            "neighbor": "R12",
+                            "neighbor_interface": "FastEthernet0/0"
+                        },
+                        {
+                            "name": "GigabitEthernet1/0",
+                            "ip_address": "2001:192:169:10::2/64",
+                            "neighbor": "R13",
+                            "neighbor_interface": "GigabitEthernet1/0"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
