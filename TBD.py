@@ -39,7 +39,7 @@ def generate_router_config(router_info):
         config.append(" no shutdown")
         config.append("!")
 
-    # Additional configurations like routing protocols can be added here
+    
 
     return "\n".join(config)
 
