@@ -3,6 +3,7 @@ import json
 def generate_router_config(router_info):
     """Generate router configuration based on the provided information."""
     config = [
+        "!\r"*3,
         "!",
         "version 15.2",
         "service timestamps debug datetime msec",
@@ -39,7 +40,15 @@ def generate_router_config(router_info):
         config.append(" no shutdown")
         config.append("!")
 
-    
+    reste = [
+        "!",
+        "ip forward-protocol nd",
+        "!\r"*2,
+        "no ip http server",
+        "no ip http secure-server",
+        "!",
+        
+    ]
 
     return "\n".join(config)
 
@@ -48,7 +57,7 @@ with open('router_info_full.json', 'r') as file:
     routers = json.load(file)
 
 # Generating configuration for each router
-for router in routers['AS'][1]['routers']:
+for router in routers['AS'][0]['routers']:
     config = generate_router_config(router)
     with open(f"{router['name']}_config.cfg", 'w') as file:
         file.write(config)
