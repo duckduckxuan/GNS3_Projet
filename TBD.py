@@ -7,7 +7,7 @@ def generate_router_config(router_info):
         "version 15.2",
         "service timestamps debug datetime msec",
         "service timestamps log datetime msec",
-        "！",
+        "!",
         f"hostname {router_info['name']}",
         "!",
         "boot-start-marker",
@@ -18,9 +18,9 @@ def generate_router_config(router_info):
         "ip cef",
         "!\r"*6,
         "no ip domain lookup",
-        “ipv6 unicast-routing”，
-        “ipv6 cef”，
-        “!\r”*2，
+        "ipv6 unicast-routing",
+        "ipv6 cef",
+        "!\r"*2,
         "multilink bundle-name authenticated",
         "!\r"*9,
         "ip tcp synwait-time 5",
@@ -48,7 +48,7 @@ with open('router_info_full.json', 'r') as file:
     routers = json.load(file)
 
 # Generating configuration for each router
-for router in routers['AS'][0]['routers']:
+for router in routers['AS'][1]['routers']:
     config = generate_router_config(router)
     with open(f"{router['name']}_config.cfg", 'w') as file:
         file.write(config)
