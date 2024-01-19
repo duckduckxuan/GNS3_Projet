@@ -19,6 +19,16 @@
                             "name": "GigabitEthernet1/0",
                             "neighbor": "R3",
                             "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
                         }
                     ]
                 },
@@ -40,6 +50,11 @@
                             "name": "GigabitEthernet2/0",
                             "neighbor": "R3",
                             "neighbor_interface": "GigabitEthernet2/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
                         }
                     ]
                 },
@@ -61,6 +76,11 @@
                             "name": "GigabitEthernet2/0",
                             "neighbor": "R2",
                             "neighbor_interface": "GigabitEthernet2/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
                         }
                     ]
                 },
@@ -131,6 +151,11 @@
                             "neighbor_interface": "GigabitEthernet1/0"
                         },
                         {
+                            "name": "GigabitEthernet2/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
+                        },
+                        {
                             "name": "GigabitEthernet3/0",
                             "neighbor": "R5",
                             "neighbor_interface": "GigabitEthernet3/0"
@@ -150,6 +175,11 @@
                             "name": "GigabitEthernet1/0",
                             "neighbor": "R5",
                             "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
                         },
                         {
                             "name": "GigabitEthernet3/0",
@@ -184,6 +214,11 @@
                             "name": "GigabitEthernet2/0",
                             "neighbor": "R11",
                             "neighbor_interface": "GigabitEthernet2/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
                         }
                     ]
                 },
@@ -205,6 +240,11 @@
                             "name": "GigabitEthernet2/0",
                             "neighbor": "R10",
                             "neighbor_interface": "GigabitEthernet2/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
                         }
                     ]
                 },
@@ -278,6 +318,11 @@
                             "name": "GigabitEthernet2/0",
                             "neighbor": "R13",
                             "neighbor_interface": "GigabitEthernet2/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
                         }
                     ]
                 },
@@ -299,6 +344,11 @@
                             "name": "GigabitEthernet2/0",
                             "neighbor": "R12",
                             "neighbor_interface": "GigabitEthernet2/0"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
                         }
                     ]
                 },
@@ -315,6 +365,16 @@
                             "name": "GigabitEthernet1/0",
                             "neighbor": "R13",
                             "neighbor_interface": "GigabitEthernet1/0"
+                        },
+                        {
+                            "name": "GigabitEthernet2/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
+                        },
+                        {
+                            "name": "GigabitEthernet3/0",
+                            "neighbor": "None",
+                            "neighbor_interface": "None"
                         }
                     ]
                 }
