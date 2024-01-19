@@ -3,7 +3,6 @@ import json
 def generate_router_config(router_info):
     # List of routers using different protocol
     rip = ["R1", "R2", "R3", "R4", "R5", "R6", "R7"]
-    ospf = ["R8", "R9", "R10", "R11", "R12", "R13", "R14"]
 
     # Generate router configuration based on the provided information.
     config = [
@@ -35,7 +34,7 @@ def generate_router_config(router_info):
     # Configure Loopback Interface
     config.append("interface Loopback0")
     config.append(" no ip address")
-    config.append(f" ipv6 address {router_info['loopback']}")
+    config.append(f" ipv6 address {router_info['loopback']}")#json文件里自动分配地址（未完成）
     config.append(" ipv6 enable")
 
     if router_info['name'] in rip:
@@ -48,8 +47,18 @@ def generate_router_config(router_info):
     # Configure each interface (需要修改，未完成)
     for interface in router_info['interfaces']:
         config.append(f"interface {interface['name']}")
-        config.append(f" ip address {interface['ip_address']}")
-        config.append(" no shutdown")
+        config.append(" no ip address")
+
+        if interface['neighbor'] == "None":
+            config.append(" shutdown")
+
+        if interface['name'] == "FastEthernet0/0":
+            config.append(" duplex full")
+        else:
+            config.append(" negotiation auto")
+
+        config.append(f" ipv6 address {interface['ip_address']}")
+        config.append(" ipv6 enable")
         config.append("!")
 
     # Configure the first part of ending infomation
