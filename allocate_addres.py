@@ -1,10 +1,11 @@
-import json
-
 class Router:
     def __init__(self, name, router_type, interfaces):
         self.name = name
         self.router_type = router_type
         self.interfaces = interfaces
+
+    def __str__(self):
+        return f"Router(Name: {self.name}, Type: {self.router_type}, Interfaces: {self.interfaces})"
         
 class AS:
     def __init__(self, number, ip_range, loopback_range, protocol, routers):
@@ -13,6 +14,10 @@ class AS:
         self.loopback_range = loopback_range
         self.protocol = protocol
         self.routers = [Router(router['name'], router['type'], router['interfaces']) for router in routers]
+
+    def __str__(self):
+        router_str = '\n  '.join(str(router) for router in self.routers)
+        return f"AS(Number: {self.number}, IP Range: {self.ip_range}, Loopback Range: {self.loopback_range}, Protocol: {self.protocol}, Routers:\n  {router_str})"
 
 
 
@@ -85,6 +90,7 @@ def generate_router_id(name):
     router_number = ''.join(filter(str.isdigit, name))
     return '.'.join([router_number] * 4)
 
+
 def generate_config(name, router_id, loopback, interfaces):
     config = f"hostname {name}\n"
     config += f"router-id {router_id}\n" 
@@ -97,7 +103,7 @@ def generate_config(name, router_id, loopback, interfaces):
     return config
 
 
-
+"""   
 with open('router_infos_test.json', 'r') as file:
     data = json.load(file)
 
@@ -133,4 +139,4 @@ with open('router_configs.txt', "w") as file:
             generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
             router_config = generate_config(router.name, router_id, router_loopback, router.interfaces)
             file.write(router_config + "\n\n")
-            
+"""          

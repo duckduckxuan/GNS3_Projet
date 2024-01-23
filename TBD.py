@@ -1,6 +1,6 @@
-import json
-import re
+from allocate_addres import *
 
+"""
 # Reading the JSON file
 with open('router_info_full.json', 'r') as file:
     auto_sys = json.load(file)
@@ -11,11 +11,12 @@ for as_info in auto_sys['AS']:
     with open(f"{as_info['routers']['name']}_config.cfg", 'w') as file:
         file.write(config)
 
-# 移动生成文件至GNS3 project文件夹（未完成）
+"""
 
 
-def generate_router_config(as_info):
-    # Generate start information
+
+# Configure head of file(已完成)
+def config_head(name):
     config = [
         "!\r"*3,
         "!",
@@ -23,7 +24,7 @@ def generate_router_config(as_info):
         "service timestamps debug datetime msec",
         "service timestamps log datetime msec",
         "!",
-        f"hostname {as_info['routers']['name']}",
+        f"hostname {name}",
         "!",
         "boot-start-marker",
         "boot-end-marker",
@@ -41,51 +42,72 @@ def generate_router_config(as_info):
         "ip tcp synwait-time 5",
         "!\r"*11 + "!",
     ]
-    # TBD
+    return config
 
 
-# Configure Loopback Interface
-def config_loopback(as_info):
-    loopback_range = as_info['loopback_range']
-
+# Configure Loopback Interface(已完成)
+def config_loopback(ip_loopback, protocol):
+    config = []
     config.append("interface Loopback0")
     config.append(" no ip address")
-    config.append(f" ipv6 address {ip_loopback}")#json文件里自动分配地址（未完成）
+    config.append(f" ipv6 address {ip_loopback}")
     config.append(" ipv6 enable")
 
-    if router_info['name'] in rip:
+    if protocol == "RIP":
         config.append(" ipv6 rip 2001 enable")
-    else:
+    if protocol == "OSPF":
         config.append(" ipv6 ospf 2002 area 0")
 
     config.append("!")
+    return config
 
 
-# Configure each interface (需要修改，未完成)
-def config_interface():
-    for interface in router_info['interfaces']:
+# Configure each interface(已完成)
+def config_interface(ipv6_address, interfaces, protocol):
+    config = []
+    for interface in interfaces:
         config.append(f"interface {interface['name']}")
         config.append(" no ip address")
 
         if interface['neighbor'] == "None":
             config.append(" shutdown")
 
-        if interface['name'] == "FastEthernet0/0":
-            config.append(" duplex full")
+            if interface['name'] == "FastEthernet0/0":
+                config.append(" duplex full")
+            else:
+                config.append(" negotiation auto")
+
         else:
-            config.append(" negotiation auto")
+            if interface['name'] == "FastEthernet0/0":
+                config.append(" duplex full")
+            else:
+                config.append(" negotiation auto")
 
-        config.append(f" ipv6 address {interface['ip_address']}")
-        config.append(" ipv6 enable")
+            config.append(f" ipv6 address {ipv6_address}")
+            config.append(" ipv6 enable")
+
+            if protocol == "RIP":
+                config.append(" ipv6 rip 2001 enable")
+            if protocol == "OSPF":
+                config.append(" ipv6 ospf 2002 area 0")
+
         config.append("!")
+        return config
 
-# Configure bgp neighbor
-        
+# Configure bgp neighbor(需要找到邻居的ip_loopback地址)
+def  config_bgp(number, router_id):
+    config = []
+    config.append(f"router bgp {number}")
+    config.append(f" bgp router-id {router_id}")
+    config.append(" bgp log-neighbor-changes")
+    config.append(" no bgp default ipv4-unicast")
+    config.append("")
 
 #Configure ipv6 neighbor
-        
+def     
         
 # Configure the first part of ending infomation
+def
     partie_1 = [
         "!",
         "ip forward-protocol nd",
@@ -113,6 +135,7 @@ def config_interface():
         config.append(" passive-interface FastEthernet0/0")
 
     # Configure the second part of ending information
+def
     partie_2 = [
         "!\r"*3 + "!",
         "control-plane",
@@ -136,4 +159,6 @@ def config_interface():
     for i in partie_2:
         config.append(i)
 
+# Generate configuration
+def
     return "\n".join(config)
