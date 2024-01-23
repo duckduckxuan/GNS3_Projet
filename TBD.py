@@ -94,7 +94,7 @@ def config_interface(ipv6_address, interfaces, protocol):
         config.append("!")
         return config
 
-# Configure bgp neighbor(需要找到邻居的ip_loopback地址)
+# Configure bgp neighbor(需要找到邻居的ip_loopback地址)(未完成)
 def  config_bgp(number, router_id):
     config = []
     config.append(f"router bgp {number}")
@@ -103,10 +103,10 @@ def  config_bgp(number, router_id):
     config.append(" no bgp default ipv4-unicast")
     config.append("")
 
-#Configure ipv6 neighbor
+#Configure ipv6 neighbor(未完成)
 def     
         
-# Configure the first part of ending infomation
+# Configure the first part of ending infomation(未完成)
 def
     partie_1 = [
         "!",
@@ -134,7 +134,7 @@ def
     if router_info['name']=="R9":
         config.append(" passive-interface FastEthernet0/0")
 
-    # Configure the second part of ending information
+# Configure the second part of ending information(未完成)
 def
     partie_2 = [
         "!\r"*3 + "!",
@@ -159,6 +159,6 @@ def
     for i in partie_2:
         config.append(i)
 
-# Generate configuration
+# Generate configuration(未完成)
 def
     return "\n".join(config)
