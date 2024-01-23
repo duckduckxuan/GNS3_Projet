@@ -41,10 +41,9 @@ def generate_connections_matrix(routers, AS):
     return connections
 
 
-def generate_loopback(name, loopback_range, routers):
+def generate_loopback(name, loopback_range):
     router_number = int(name[1:])
-    router_id = f"{loopback_range[:-4]}{router_number}::1/128"
-    routers['router_id'] = router_id
+    return f"{loopback_range[:-4]}{router_number}::1/128"
 
 
 def generate_interface_addresses(name, interfaces, connections, connection_counts):
