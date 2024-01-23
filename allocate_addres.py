@@ -41,9 +41,10 @@ def generate_connections_matrix(routers, AS):
     return connections
 
 
-def generate_loopback(name, loopback_range):
+def generate_loopback(name, loopback_range, routers):
     router_number = int(name[1:])
-    return f"{loopback_range[:-4]}{router_number}::1/128"
+    router_id = f"{loopback_range[:-4]}{router_number}::1/128"
+    routers['router_id'] = router_id
 
 
 def generate_interface_addresses(name, interfaces, connections, connection_counts):
@@ -85,7 +86,6 @@ def generate_router_id(name):
     router_number = ''.join(filter(str.isdigit, name))
     return '.'.join([router_number] * 4)
 
-
 def generate_config(name, router_id, loopback, interfaces):
     config = f"hostname {name}\n"
     config += f"router-id {router_id}\n" 
@@ -96,7 +96,6 @@ def generate_config(name, router_id, loopback, interfaces):
             config += f" ipv6 address {interface['ipv6_address']}\n"
     
     return config
-
 
 
 
