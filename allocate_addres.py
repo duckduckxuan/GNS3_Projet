@@ -14,6 +14,8 @@ class AS:
         self.protocol = protocol
         self.routers = [Router(router['name'], router['type'], router['interfaces']) for router in routers]
 
+
+
 def generate_connections_matrix(routers, AS):
     connections = []
     for router in routers:
@@ -39,9 +41,10 @@ def generate_connections_matrix(routers, AS):
     return connections
 
 
-def generate_loopback(name, loopback_range):
+def generate_loopback(name, loopback_range, routers):
     router_number = int(name[1:])
-    return f"{loopback_range[:-4]}{router_number}::1/128"
+    router_id = f"{loopback_range[:-4]}{router_number}::1/128"
+    routers['router_id'] = router_id
 
 
 def generate_interface_addresses(name, interfaces, connections, connection_counts):
@@ -50,7 +53,6 @@ def generate_interface_addresses(name, interfaces, connections, connection_count
             router_index = int(name[1:])
             neighbor_index = int(interface['neighbor'][1:])
             connection = tuple(sorted([neighbor_index, router_index]))
-
             
             state = None
             for conn in connections:
@@ -73,20 +75,18 @@ def generate_interface_addresses(name, interfaces, connections, connection_count
             elif connection_counts["111"] <= connection_index < connection_counts["111"] + connection_counts["border"]:
                 subnet = connection_index- connection_counts["111"]
             else:
-                subnet = connection_index- connection_counts["111"] - connection_counts["border"]
-            
+                subnet = connection_index- connection_counts["111"] - connection_counts["border"] 
 
             address_number = 1 if router_index < neighbor_index else 2
             ipv6_address = f"{ip_range[:-6]}{subnet+1}::{address_number}/64"
-            interface['ipv6_address'] = ipv6_address
-            
-        
+            interface['ipv6_address'] = ipv6_address                 
             
 
 def generate_router_id(name):
     router_number = ''.join(filter(str.isdigit, name))
     return '.'.join([router_number] * 4)
 
+"""
 def generate_config(name, router_id, loopback, interfaces):
     config = f"hostname {name}\n"
     config += f"router-id {router_id}\n" 
@@ -97,9 +97,11 @@ def generate_config(name, router_id, loopback, interfaces):
             config += f" ipv6 address {interface['ipv6_address']}\n"
     
     return config
+"""
 
 
-with open('router_infos_TBD.json', 'r') as file:
+
+with open('router_infos_test.json', 'r') as file:
     data = json.load(file)
 
 all_as = [AS(as_info['number'], as_info['IP_range'], as_info['loopback_range'], as_info['protocol'], as_info['routers']) 
@@ -113,19 +115,23 @@ for as_index in all_as:
 all_routers = [router for as_index in all_as for router in as_index.routers]
 connections_matrix = generate_connections_matrix(all_routers, as_mapping)
 
-"""for as_index in all_as:
-    for router in as_index.routers:
-        router_loopback = generate_loopback(router.name, as_index.loopback_range)
-        router_id = generate_router_id(router.name)
-        generate_interface_addresses(router.name, router.interfaces, connections_matrix)
-        router_config = generate_config(router.name, router_id, router_loopback, router.interfaces)
-        #print(router_config) """
-
 connection_counts = {"111": 0, "112": 0, "border": 0}
 for conn in connections_matrix:
     connection_counts[conn[1]] += 1
 
-with open("router_configs.txt", "w") as file:
+for as_index in all_as:
+    for router in as_index.routers:
+        router_loopback = generate_loopback(router.name, as_index.loopback_range, as_index.routers)
+        router_id = generate_router_id(router.name)
+        generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
+        #router_config = generate_config(router.name, router_id, router_loopback, router.interfaces)
+        #print(router_config)
+
+with open('router_infos_test.json', "w") as file:
+    json.dump(data, file, indent=4)
+
+"""
+with open('router_infos_test.json', "w") as file:
     for as_index in all_as:
         for router in as_index.routers:
             router_loopback = generate_loopback(router.name, as_index.loopback_range)
@@ -133,3 +139,4 @@ with open("router_configs.txt", "w") as file:
             generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
             router_config = generate_config(router.name, router_id, router_loopback, router.interfaces)
             file.write(router_config + "\n\n")
+"""
