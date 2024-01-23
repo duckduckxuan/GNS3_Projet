@@ -95,20 +95,50 @@ def config_interface(ipv6_address, interfaces, protocol):
         return config
 
 # Configure bgp neighbor(需要找到邻居的ip_loopback地址)(未完成)
-def  config_bgp(number, router_id):
+def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict):
     config = []
-    config.append(f"router bgp {number}")
+    config.append(f"router bgp {router.number}")
     config.append(f" bgp router-id {router_id}")
     config.append(" bgp log-neighbor-changes")
     config.append(" no bgp default ipv4-unicast")
-    config.append("")
 
-#Configure ipv6 neighbor(未完成)
-def     
-        
+    for elem in connections_matrix_name:
+        ((r1, r2), state) = elem
+        if state == 'border':
+            if router.name == r1:
+                for interface in router.interfaces:
+                    if interface['neighbor'] == r2:
+                        neighbor = r2
+                        neighbor_interface = interface['neighbor_interface']
+            elif router.name == r2:
+                for interface in router.interfaces:
+                    if interface['neighbor'] == r1:
+                        neighbor = r1
+                        neighbor_interface = interface['neighbor_interface']
+    for routeur in routers:
+        if routeur.name == neighbor:
+            for interface in routeur.interfaces:
+                if interface['name'] == neighbor_interface:
+                    ip_neighbor = routeur.interfaces['ipv6_address']
+    as_number = routers_dict[neighbor]['AS']
+    config.append(f" neighbor {ip_neighbor} remote-as {as_number}")
+    for routeur in routers_dict:
+        if routeur.key != router.name:
+            config.append(f" neighbor {routeur.value['loopback']} remote-as {routeur.value['AS']}")
+            config.append(f" neighbor {routeur.value['loopback']} update-source Loopback0")
+    config.append(" !")
+    config.append(" address-family ipv4")
+    config.append(" exit-address-family")
+    config.append(" !")
+    config.append(" address-family ipv6")
+    return config
+
+   
+"""        
 # Configure the first part of ending infomation(未完成)
-def
-    partie_1 = [
+def config_end():
+    config = []
+    part1 = [
         "!",
         "ip forward-protocol nd",
         "!\r!",
@@ -117,7 +147,7 @@ def
         "!"
     ]
 
-    for i in partie_1:
+    for i in part1:
         config.append(i)
 
     # Configure part of protocol
@@ -134,9 +164,7 @@ def
     if router_info['name']=="R9":
         config.append(" passive-interface FastEthernet0/0")
 
-# Configure the second part of ending information(未完成)
-def
-    partie_2 = [
+    part2 = [
         "!\r"*3 + "!",
         "control-plane",
         "!\r!",
@@ -153,12 +181,9 @@ def
         "line vty 0 4",
         " login",
         "!\r!",
-        "end"
+        "end\r"
     ]
 
-    for i in partie_2:
+    for i in part2:
         config.append(i)
-
-# Generate configuration(未完成)
-def
-    return "\n".join(config)
+"""

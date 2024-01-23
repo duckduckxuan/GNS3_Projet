@@ -1,5 +1,6 @@
 import json
 from allocate_addres import *
+from TBD import *
 
 
 with open('router_infos_test.json', 'r') as file:
@@ -15,6 +16,10 @@ for as_index in all_as:
 
 all_routers = [router for as_index in all_as for router in as_index.routers]
 connections_matrix = generate_connections_matrix(all_routers, as_mapping)
+print(connections_matrix)
+
+routers_info = generate_routers_dict(all_as)
+print(routers_info)
 
 connection_counts = {"111": 0, "112": 0, "border": 0}
 for conn in connections_matrix:
@@ -25,13 +30,36 @@ for as_index in all_as:
         router_loopback = generate_loopback(router.name, as_index.loopback_range)
         router_id = generate_router_id(router.name)
         generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
-        router_config = generate_config(router.name, router_id, router_loopback, router.interfaces)
+        #router_config = generate_config(router.name, router_id, router_loopback, router.interfaces)
 
+"""
 with open('router_configs.txt', "w") as file:
     for as_obj in all_as:
         file.write(str(as_obj) + "\n\n")
+"""
+"""
+with open('router_configs.txt', "w") as file:
+    for as_index in all_as:
+        for router in as_index.routers:
+            router_loopback = generate_loopback(router.name, as_index.loopback_range)
+            router_id = generate_router_id(router.name)
+            generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
+            router_config = generate_config(router.name, router_id, router_loopback, router.interfaces)
+            file.write(router_config + "\n\n")
+"""
+config = []
 
-
-
+with open(f"{data['routers']['name']}_config.cfg", 'w') as file:
+        for as_index in all_as:
+            for router in as_index.routers:
+                router_loopback = generate_loopback(router.name, as_index.loopback_range)
+                router_id = generate_router_id(router.name)
+                generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
+                router_config = generate_config(router.name, router_id, router_loopback, router.interfaces)
+                config.extend(config_head(router.name))
+                config.extend(config_loopback(router_loopback, as_index.protocol))
+                config.extend(config_interface(router.interfaces['ipv6_address'], router.interfaces, as_index.protocol))
+                config.extend(config_bgp(router, router_id, as_index.routers, connections_matrix, routers_info))
+                file.write(config)
 
 # 移动生成文件至GNS3 project文件夹（未完成）
