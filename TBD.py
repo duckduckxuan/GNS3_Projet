@@ -1,10 +1,21 @@
 import json
 
-def generate_router_config(router_info):
-    # List of routers using different protocol
-    rip = ["R1", "R2", "R3", "R4", "R5", "R6", "R7"]
+# Reading the JSON file
+with open('router_info_full.json', 'r') as file:
+    routers = json.load(file)
 
-    # Generate router configuration based on the provided information.
+# Generating configuration for each router
+for router in routers['AS']:
+    config = generate_router_config(router)
+    with open(f"{router['name']}_config.cfg", 'w') as file:
+        file.write(config)
+
+# 移动生成文件至GNS3 project文件夹（未完成）
+
+
+def generate_router_config(file_json):
+
+    # Generate start information
     config = [
         "!\r"*3,
         "!",
@@ -31,7 +42,8 @@ def generate_router_config(router_info):
         "!\r"*11 + "!",
     ]
 
-    # Configure Loopback Interface
+# Configure Loopback Interface
+def config_loopback(file_json):
     config.append("interface Loopback0")
     config.append(" no ip address")
     config.append(f" ipv6 address {router_info['loopback']}")#json文件里自动分配地址（未完成）
@@ -44,7 +56,9 @@ def generate_router_config(router_info):
 
     config.append("!")
 
-    # Configure each interface (需要修改，未完成)
+
+# Configure each interface (需要修改，未完成)
+def config_interface():
     for interface in router_info['interfaces']:
         config.append(f"interface {interface['name']}")
         config.append(" no ip address")
@@ -61,7 +75,13 @@ def generate_router_config(router_info):
         config.append(" ipv6 enable")
         config.append("!")
 
-    # Configure the first part of ending infomation
+# Configure bgp neighbor
+        
+
+#Configure ipv6 neighbor
+        
+        
+# Configure the first part of ending infomation
     partie_1 = [
         "!",
         "ip forward-protocol nd",
@@ -113,15 +133,3 @@ def generate_router_config(router_info):
         config.append(i)
 
     return "\n".join(config)
-
-# Reading the JSON file
-with open('router_info_full.json', 'r') as file:
-    routers = json.load(file)
-
-# Generating configuration for each router
-for router in routers['AS'][0]['routers']:
-    config = generate_router_config(router)
-    with open(f"{router['name']}_config.cfg", 'w') as file:
-        file.write(config)
-
-# 移动生成文件至GNS3 project文件夹（未完成）
