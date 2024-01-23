@@ -1,20 +1,20 @@
 import json
+import re
 
 # Reading the JSON file
 with open('router_info_full.json', 'r') as file:
-    routers = json.load(file)
+    auto_sys = json.load(file)
 
 # Generating configuration for each router
-for router in routers['AS']:
-    config = generate_router_config(router)
-    with open(f"{router['name']}_config.cfg", 'w') as file:
+for as_info in auto_sys['AS']:
+    config = generate_router_config(as_info)
+    with open(f"{as_info['routers']['name']}_config.cfg", 'w') as file:
         file.write(config)
 
 # 移动生成文件至GNS3 project文件夹（未完成）
 
 
-def generate_router_config(file_json):
-
+def generate_router_config(as_info):
     # Generate start information
     config = [
         "!\r"*3,
@@ -23,7 +23,7 @@ def generate_router_config(file_json):
         "service timestamps debug datetime msec",
         "service timestamps log datetime msec",
         "!",
-        f"hostname {router_info['name']}",
+        f"hostname {as_info['routers']['name']}",
         "!",
         "boot-start-marker",
         "boot-end-marker",
@@ -41,12 +41,16 @@ def generate_router_config(file_json):
         "ip tcp synwait-time 5",
         "!\r"*11 + "!",
     ]
+    # TBD
+
 
 # Configure Loopback Interface
-def config_loopback(file_json):
+def config_loopback(as_info):
+    loopback_range = as_info['loopback_range']
+
     config.append("interface Loopback0")
     config.append(" no ip address")
-    config.append(f" ipv6 address {router_info['loopback']}")#json文件里自动分配地址（未完成）
+    config.append(f" ipv6 address {ip_loopback}")#json文件里自动分配地址（未完成）
     config.append(" ipv6 enable")
 
     if router_info['name'] in rip:
