@@ -41,10 +41,9 @@ def generate_connections_matrix(routers, AS):
     return connections
 
 
-def generate_loopback(name, loopback_range, routers):
+def generate_loopback(name, loopback_range):
     router_number = int(name[1:])
-    router_id = f"{loopback_range[:-4]}{router_number}::1/128"
-    routers['router_id'] = router_id
+    return f"{loopback_range[:-4]}{router_number}::1/128"
 
 
 def generate_interface_addresses(name, interfaces, connections, connection_counts):
@@ -86,7 +85,7 @@ def generate_router_id(name):
     router_number = ''.join(filter(str.isdigit, name))
     return '.'.join([router_number] * 4)
 
-"""
+
 def generate_config(name, router_id, loopback, interfaces):
     config = f"hostname {name}\n"
     config += f"router-id {router_id}\n" 
@@ -97,7 +96,7 @@ def generate_config(name, router_id, loopback, interfaces):
             config += f" ipv6 address {interface['ipv6_address']}\n"
     
     return config
-"""
+
 
 
 
@@ -121,17 +120,14 @@ for conn in connections_matrix:
 
 for as_index in all_as:
     for router in as_index.routers:
-        router_loopback = generate_loopback(router.name, as_index.loopback_range, as_index.routers)
+        router_loopback = generate_loopback(router.name, as_index.loopback_range)
         router_id = generate_router_id(router.name)
         generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
-        #router_config = generate_config(router.name, router_id, router_loopback, router.interfaces)
-        #print(router_config)
+        router_config = generate_config(router.name, router_id, router_loopback, router.interfaces)
+        print(router_config)
 
-with open('router_infos_test.json', "w") as file:
-    json.dump(data, file, indent=4)
 
-"""
-with open('router_infos_test.json', "w") as file:
+with open('router_configs.txt', "w") as file:
     for as_index in all_as:
         for router in as_index.routers:
             router_loopback = generate_loopback(router.name, as_index.loopback_range)
@@ -139,4 +135,4 @@ with open('router_infos_test.json', "w") as file:
             generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
             router_config = generate_config(router.name, router_id, router_loopback, router.interfaces)
             file.write(router_config + "\n\n")
-"""
+            
