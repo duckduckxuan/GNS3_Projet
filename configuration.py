@@ -85,7 +85,7 @@ def config_interface(interfaces, protocol):
     return config  # Moved return statement outside the loop
 
 
-# Configure bgp neighbor(需要找到邻居的ip_loopback地址)(未完成+待修改)
+# Configure bgp neighbor(eBGP部分待修改)
 def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict):
     config = []
     current_as = routers_dict[router.name]['AS']
@@ -125,20 +125,31 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
             as_number = routers_dict[neighbor]['AS']
             config.append(f" neighbor {neighbor_ip} remote-as {as_number}")
 
-    # iBGP(未完成)
+    # iBGP
+    neighbor_liste = []
     for routeur_name, routeur_info in routers_dict.items():
         if routeur_name != router.name and routeur_info['AS'] == current_as:
-            config.append(f" neighbor {routeur_info['loopback']} remote-as {routeur_info['AS']}")
-            config.append(f" neighbor {routeur_info['loopback']} update-source Loopback0")
+            config.append(f" neighbor {routeur_info['loopback'][:-4]} remote-as {routeur_info['AS']}")
+            config.append(f" neighbor {routeur_info['loopback'][:-4]} update-source Loopback0")
+            neighbor_liste.append(routeur_info['loopback'][:-4])
 
     config.append(" !")
     config.append(" address-family ipv4")
     config.append(" exit-address-family")
     config.append(" !")
     config.append(" address-family ipv6")
-    # 添加子网掩码
 
-    # 激活所有邻居
+    # Announce neighbor subnet
+    for interface in router.interfaces:
+        ip_addr = interface.get('ipv6_address', '')
+        if ip_addr:
+            network = ip_addr[:-4]+ip_addr[-3:]
+            config.append(f"  network {network}")
+
+    # Activate neighbor IP loopback
+    for ip_neighbor in neighbor_liste:
+        config.append(f"  neighbor {ip_neighbor} activate")
+
     config.append(" exit-address-family")
     config.append("!")
 
@@ -147,16 +158,13 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
       
 # Configure end of file(已完成，待修改)
 def config_end(protocol, router_id, routers, connections_matrix_name, routers_dict):
-    config = []
-    part1 = [
+    config = [
         "ip forward-protocol nd",
         "!\r!",
         "no ip http server",
         "no ip http secure-server",
         "!"
     ]
-
-    config.extend(part1)
 
     # Configure part of protocol
     if protocol == "RIP":
@@ -166,6 +174,7 @@ def config_end(protocol, router_id, routers, connections_matrix_name, routers_di
         config.append("ipv6 router ospf 2002")
         config.append(f" router-id {router_id}")
 
+####################################################################################################
     # 找eBGP接口，passive ospf(有问题，找不到接口，待修改)
     if protocol == "OSPF":
         for router in routers:
@@ -198,10 +207,9 @@ def config_end(protocol, router_id, routers, connections_matrix_name, routers_di
                     config.append(f" passive-interface {interface_name}")
                 else:
                     print(f"没有找到与eBGP邻居{neighbor}相连的接口")
+##################################################################################################################
 
-
-
-    part2 = [
+    part = [
         "!\r"*3 + "!",
         "control-plane",
         "!\r!",
@@ -221,6 +229,6 @@ def config_end(protocol, router_id, routers, connections_matrix_name, routers_di
         "end"
     ]
 
-    config.extend(part2)
+    config.extend(part)
 
     return config
