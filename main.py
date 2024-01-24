@@ -24,6 +24,7 @@ for as_index in all_as:
 
 all_routers = [router for as_index in all_as for router in as_index.routers]
 connections_matrix_name = generate_connections_matrix_name(all_routers, as_mapping)
+print(connections_matrix_name)
 connections_matrix = generate_connections_matrix(all_routers, as_mapping)
 routers_info = generate_routers_dict(all_as)
 
@@ -51,19 +52,19 @@ target_directory = [
     'gns3_final/project-files/dynamips/0611ba5c-e75a-4aab-9652-83885f48b5fb'
 ]
 
+for as_index in all_as:
+    for router in as_index.routers:
+        generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
 
 for as_index in all_as:
     for router in as_index.routers:
-        config = []
-
         router_loopback = generate_loopback(router.name, as_index.loopback_range)
         router_id = generate_router_id(router.name)
-        generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
-
+        config = []
         config.extend(config_head(router.name))
         config.extend(config_loopback(router_loopback, as_index.protocol))
-        config.extend(config_interface(router.interfaces, as_index.protocol))
-        config.extend(config_bgp(router, router_id, as_index.routers, connections_matrix_name, routers_info))
+        config.extend(config_interface(router.interfaces, as_index.protocol, router, connections_matrix_name))
+        config.extend(config_bgp(router, router_id, all_routers, connections_matrix_name, routers_info))
         config.extend(config_end(as_index.protocol, router_id, router, connections_matrix_name))
         
         with open(f"i{router.name[1:]}_startup-config-new.cfg", 'w') as file:

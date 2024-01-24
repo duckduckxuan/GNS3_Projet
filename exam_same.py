@@ -16,8 +16,8 @@ def are_files_identical(file1, file2):
     return same
 
 # 替换为实际的文件路径
-file_path1 = 'config_final\i14_startup-config.cfg'
-file_path2 = 'R14_config.cfg'
+file_path1 = 'config_final\i9_startup-config.cfg'
+file_path2 = 'i9_startup-config-new.cfg'
 
 if are_files_identical(file_path1, file_path2):
     print("文件内容完全相同。")

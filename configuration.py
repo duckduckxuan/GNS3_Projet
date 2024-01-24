@@ -49,7 +49,7 @@ def config_loopback(ip_loopback, protocol):
 
 
 # Configure each interface(已完成)
-def config_interface(interfaces, protocol):
+def config_interface(interfaces, protocol, router, connections_matrix_name):
     config = []
     for interface in interfaces:
         config.append(f"interface {interface['name']}")
@@ -74,33 +74,32 @@ def config_interface(interfaces, protocol):
                 config.append(f" ipv6 address {ipv6_address}")
                 config.append(" ipv6 enable")
 
-                if protocol == "RIP":
+                if protocol == "RIP" and not ipv6_address.startswith("2001:192:170:"):
                     config.append(" ipv6 rip 2001 enable")
+
                 elif protocol == "OSPF":  # Changed to elif for better practice
                     config.append(" ipv6 ospf 2002 area 0")
-                else: # 如果eBGP就什么都不加
-                    pass
 
         config.append("!")
 
     return config  # Moved return statement outside the loop
 
 
-# Configure bgp neighbor(eBGP部分待修改)
+# Configure bgp neighbor
 def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict):
     config = []
     current_as = routers_dict[router.name]['AS']
+    neighbor_liste = []
 
     config.append(f"router bgp {current_as}")
     config.append(f" bgp router-id {router_id}")
     config.append(" bgp log-neighbor-changes")
     config.append(" no bgp default ipv4-unicast")
 
-####################################################################################
-    myself = None
-    neighbor_ip = None
+    if router.router_type == "eBGP":
+        neighbor_ip = None
 
-    for elem in connections_matrix_name:
+        for elem in connections_matrix_name:
             ((r1, r2), state) = elem
 
             if state == 'border':
@@ -115,22 +114,17 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
                     for routeur in routers:
                         if routeur.name == neighbor:
                             for interface in routeur.interfaces:
-                                if interface['neighbor'] == myself:
-                                    neighbor_ip = interface['ipv6_address']
+                                if interface['neighbor'] == router.name:
+                                    print(router.name)
+                                    neighbor_ip = interface.get('ipv6_address', '')
                                     print(f"找到邻居ip了{neighbor_ip}")
                                     break
 
-
                     if neighbor_ip:
                         as_number = routers_dict[neighbor]['AS']
-                        config.append(f" neighbor {neighbor_ip} remote-as {as_number}")
+                        config.append(f" neighbor {neighbor_ip[:-3]} remote-as {as_number}")
+                        neighbor_liste.append(neighbor_ip[:-3])
 
-
-
-#####################################################################################3
-
-    # iBGP
-    neighbor_liste = []
     for routeur_name, routeur_info in routers_dict.items():
         if routeur_name != router.name and routeur_info['AS'] == current_as:
             config.append(f" neighbor {routeur_info['loopback'][:-4]} remote-as {routeur_info['AS']}")
