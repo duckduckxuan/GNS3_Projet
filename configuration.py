@@ -85,7 +85,7 @@ def config_interface(interfaces, protocol):
     return config  # Moved return statement outside the loop
 
 
-# Configure bgp neighbor(需要找到邻居的ip_loopback地址)(未完成)
+# Configure bgp neighbor(需要找到邻居的ip_loopback地址)(未完成+待修改)
 def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict):
     config = []
     current_as = routers_dict[router.name]['AS']
@@ -125,7 +125,7 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
             as_number = routers_dict[neighbor]['AS']
             config.append(f" neighbor {neighbor_ip} remote-as {as_number}")
 
-    # iBGP
+    # iBGP(未完成)
     for routeur_name, routeur_info in routers_dict.items():
         if routeur_name != router.name and routeur_info['AS'] == current_as:
             config.append(f" neighbor {routeur_info['loopback']} remote-as {routeur_info['AS']}")
@@ -144,8 +144,8 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     return config
 
       
-# Configure end of file(未完成)
-def config_end(protocol, router_id, routers):
+# Configure end of file(已完成，待修改)
+def config_end(protocol, router_id, routers, connections_matrix_name):
     config = []
     part1 = [
         "ip forward-protocol nd",
@@ -169,9 +169,26 @@ def config_end(protocol, router_id, routers):
     if protocol == "OSPF":
         for router in routers:
             if router.router_type == "eBGP":
-                # 找到eBGP端口名称
-                
-        config.append(f" passive-interface {interface}")
+                # 找到eBGP端口名称(有问题，可能是缩进不对，待修改)
+                for elem in connections_matrix_name:
+                    ((r1, r2), state) = elem
+
+                    if state == 'border':
+                        if router.name == r1:
+                            myself = r1
+                            neighbor = r2
+                            print(f"找到边界邻居: {neighbor}")
+                        elif router.name == r2:
+                            myself = r2
+                            neighbor = r1
+                            print(f"找到边界邻居: {neighbor}")
+
+                for routeur in routers:
+                    if routeur.name == myself:
+                        for interface in routeur.interfaces:
+                            if interface['neighbor'] == neighbor:
+                                interface_name = interface['name']
+                config.append(f" passive-interface {interface_name}")
 
     part2 = [
         "!\r"*3 + "!",

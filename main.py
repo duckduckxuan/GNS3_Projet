@@ -55,7 +55,7 @@ for as_index in all_as:
         config.extend(config_loopback(router_loopback, as_index.protocol))
         config.extend(config_interface(router.interfaces, as_index.protocol))  # Pass interface, not router.interfaces
         config.extend(config_bgp(router, router_id, as_index.routers, connections_matrix_name, routers_info))
-        config.extend(config_end(as_index.protocol, router_id, as_index.routers))
+        config.extend(config_end(as_index.protocol, router_id, as_index.routers, connections_matrix_name))
         
         with open(f"{router.name}_config.cfg", 'w') as file:
             file.write('\n'.join(config))

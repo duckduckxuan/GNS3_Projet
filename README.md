@@ -1,4 +1,5 @@
 # GNS3_Projet
 
-test
-test2
+allocate_addres.py -> configurer l'address IP automatiquement (classes + functions)
+configuration.py -> configurer les commandes (functions)
+main.py -> script exécutable
