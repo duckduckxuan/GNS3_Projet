@@ -137,6 +137,7 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     config.append(" !")
     config.append(" address-family ipv6")
     # 添加子网掩码
+
     # 激活所有邻居
     config.append(" exit-address-family")
     config.append("!")
@@ -155,8 +156,7 @@ def config_end(protocol, router_id, routers, connections_matrix_name, routers_di
         "!"
     ]
 
-    for i in part1:
-        config.append(i)
+    config.extend(part1)
 
     # Configure part of protocol
     if protocol == "RIP":
@@ -166,10 +166,13 @@ def config_end(protocol, router_id, routers, connections_matrix_name, routers_di
         config.append("ipv6 router ospf 2002")
         config.append(f" router-id {router_id}")
 
+    # 找eBGP接口，passive ospf(有问题，找不到接口，待修改)
     if protocol == "OSPF":
         for router in routers:
             if router.router_type == "eBGP":
                 interface_name = None
+                neighbor = None
+                neighbor_router = None
 
                 for elem in connections_matrix_name:
                     ((r1, r2), state) = elem
@@ -218,7 +221,6 @@ def config_end(protocol, router_id, routers, connections_matrix_name, routers_di
         "end"
     ]
 
-    for i in part2:
-        config.append(i)
+    config.extend(part2)
 
     return config
