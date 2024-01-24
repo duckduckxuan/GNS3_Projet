@@ -97,7 +97,6 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
 
 ####################################################################################
     myself = None
-    neighbor = None
     neighbor_ip = None
 
     # 初始化循环变量
@@ -105,22 +104,26 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     found = False
 
     # 使用 while 循环查找边界邻居(没问题了)
-    while i < len(connections_matrix_name) and not found:
-        ((r1, r2), state) = connections_matrix_name[i]
+    for elem in connections_matrix_name:
+            ((r1, r2), state) = elem
 
-        if state == 'border':
-            if router.name == r1:
-                myself = r1
-                neighbor = r2
-                found = True
-                print(f"找到{myself}的邻居{neighbor}了")
-            elif router.name == r2:
-                myself = r2
-                neighbor = r1
-                found = True
-                print(f"找到{myself}的邻居{neighbor}了")
+            if state == 'border':
+                if router.name == r1:
+                    neighbor = r2
+                elif router.name == r2:
+                    neighbor = r1
+                else:
+                    neighbor = None
 
-        i += 1
+                if neighbor:
+                    for interface in router.interfaces:
+                        if interface['neighbor'] == neighbor:
+                            interface_name = interface['name']
+                            #print(f"{router.name}找到eBGP邻居对应接口: {interface_name}")
+                            break
+            
+                    config.append(f" passive-interface {interface_name}")
+
 
     # 如果找到邻居(找不到)
     if neighbor:
