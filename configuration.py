@@ -170,8 +170,8 @@ def config_end(protocol, router_id, routers):
         for router in routers:
             if router.router_type == "eBGP":
                 # 找到eBGP端口名称
-                pass
-        #config.append(f" passive-interface {interface}")
+                
+        config.append(f" passive-interface {interface}")
 
     part2 = [
         "!\r"*3 + "!",
