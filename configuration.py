@@ -172,7 +172,7 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     return config
 
       
-# Configure end of file(已完成，待修改)
+# Configure end of file(已完成)
 def config_end(protocol, router_id, router, connections_matrix_name):
     config = [
         "ip forward-protocol nd",
@@ -190,8 +190,7 @@ def config_end(protocol, router_id, router, connections_matrix_name):
         config.append("ipv6 router ospf 2002")
         config.append(f" router-id {router_id}")
 
-####################################################################################################
-    # 找eBGP接口，passive ospf(有问题，找不到接口，待修改)
+    # passive interface ospf eBGP
     if protocol == "OSPF" and router.router_type == "eBGP":
         interface_name = None
         
@@ -214,7 +213,6 @@ def config_end(protocol, router_id, router, connections_matrix_name):
                             break
             
                     config.append(f" passive-interface {interface_name}")
-##################################################################################################################
 
     part = [
         "!\r"*3 + "!",
