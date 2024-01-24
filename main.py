@@ -3,7 +3,7 @@ from allocate_addres import *
 from configuration import *
 
 
-with open('router_infos_test.json', 'r') as file:
+with open('router_infos_TBD.json', 'r') as file:
     data = json.load(file)
 
 all_as = [AS(as_info['number'], as_info['IP_range'], as_info['loopback_range'], as_info['protocol'], as_info['routers']) 
