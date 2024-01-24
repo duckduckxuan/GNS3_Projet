@@ -100,7 +100,7 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     neighbor = None
     neighbor_ip = None
 
-    # eBGP(需要修改，现在显示不出来eBGP邻居端口ip地址)
+    # 查找边界连接的邻居 IP 地址
     for elem in connections_matrix_name:
         ((r1, r2), state) = elem
 
@@ -109,22 +109,25 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
                 myself = r1
                 neighbor = r2
                 print(f"找到边界邻居: {neighbor}")
+                break
             elif router.name == r2:
                 myself = r2
                 neighbor = r1
                 print(f"找到边界邻居: {neighbor}")
+                break
 
-    for routeur in routers:
-        if routeur.name == neighbor:
-            for interface in routeur.interfaces:
-                if interface['neighbor'] == myself:
-                    neighbor_ip = interface['ipv6_address']
-                    break
-            break
+    if neighbor:
+        for routeur in routers:
+            if routeur.name == neighbor:
+                for interface in routeur.interfaces:
+                    if interface['neighbor'] == myself:
+                        neighbor_ip = interface['ipv6_address']
+                        break
 
-    if neighbor_ip:
-        as_number = routers_dict[neighbor]['AS']
-        config.append(f" neighbor {neighbor_ip} remote-as {as_number}")
+        if neighbor_ip:
+            as_number = routers_dict[neighbor]['AS']
+            config.append(f" neighbor {neighbor_ip} remote-as {as_number}")
+
 #####################################################################################3
 
     # iBGP
