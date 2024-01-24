@@ -100,33 +100,44 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     neighbor = None
     neighbor_ip = None
 
-    # 查找边界连接的邻居 IP 地址
-    for elem in connections_matrix_name:
-        ((r1, r2), state) = elem
+    # 初始化循环变量
+    i = 0
+    found = False
+
+    # 使用 while 循环查找边界邻居(没问题了)
+    while i < len(connections_matrix_name) and not found:
+        ((r1, r2), state) = connections_matrix_name[i]
 
         if state == 'border':
             if router.name == r1:
                 myself = r1
                 neighbor = r2
-                print(f"找到边界邻居: {neighbor}")
-                break
+                found = True
+                print(f"找到{myself}的邻居{neighbor}了")
             elif router.name == r2:
                 myself = r2
                 neighbor = r1
-                print(f"找到边界邻居: {neighbor}")
-                break
+                found = True
+                print(f"找到{myself}的邻居{neighbor}了")
 
+        i += 1
+
+    # 如果找到邻居(找不到)
     if neighbor:
         for routeur in routers:
             if routeur.name == neighbor:
                 for interface in routeur.interfaces:
                     if interface['neighbor'] == myself:
                         neighbor_ip = interface['ipv6_address']
+                        print(f"找到邻居ip了{neighbor_ip}")
                         break
+
 
         if neighbor_ip:
             as_number = routers_dict[neighbor]['AS']
             config.append(f" neighbor {neighbor_ip} remote-as {as_number}")
+
+
 
 #####################################################################################3
 
@@ -200,18 +211,20 @@ def config_end(protocol, router_id, routers, connections_matrix_name, routers_di
 
                             # 确保邻居存在并且AS号不同
                             if neighbor_router and routers_dict[router.name]['AS'] != routers_dict[neighbor_router.name]['AS']:
-                                print(f"找到eBGP边界邻居: {neighbor}，对应接口检查中...")
+                                #print(f"找到eBGP边界邻居: {neighbor}，对应接口检查中...")
 
                                 for interface in router.interfaces:
                                     if interface['neighbor'] == neighbor:
                                         interface_name = interface['name']
-                                        print(f"找到eBGP邻居对应接口: {interface_name}")
+                                        #print(f"找到eBGP邻居对应接口: {interface_name}")
                                         break
 
                 if interface_name:
                     config.append(f" passive-interface {interface_name}")
+                """
                 else:
                     print(f"没有找到与eBGP邻居{neighbor}相连的接口")
+                """
 ##################################################################################################################
 
     part = [
