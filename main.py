@@ -54,7 +54,7 @@ target_directory = [
 
 for as_index in all_as:
     for router in as_index.routers:
-        config = []  # Initialize config for each router
+        config = []
 
         router_loopback = generate_loopback(router.name, as_index.loopback_range)
         router_id = generate_router_id(router.name)
@@ -62,7 +62,7 @@ for as_index in all_as:
 
         config.extend(config_head(router.name))
         config.extend(config_loopback(router_loopback, as_index.protocol))
-        config.extend(config_interface(router.interfaces, as_index.protocol))  # Pass interface, not router.interfaces
+        config.extend(config_interface(router.interfaces, as_index.protocol))
         config.extend(config_bgp(router, router_id, as_index.routers, connections_matrix_name, routers_info))
         config.extend(config_end(as_index.protocol, router_id, router, connections_matrix_name))
         
