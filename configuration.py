@@ -1,4 +1,5 @@
 from allocate_addres import *
+import ipaddress
 
 # Configure head of file(已完成)
 def config_head(name):
@@ -99,11 +100,6 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     myself = None
     neighbor_ip = None
 
-    # 初始化循环变量
-    i = 0
-    found = False
-
-    # 使用 while 循环查找边界邻居(没问题了)
     for elem in connections_matrix_name:
             ((r1, r2), state) = elem
 
@@ -116,29 +112,18 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
                     neighbor = None
 
                 if neighbor:
-                    for interface in router.interfaces:
-                        if interface['neighbor'] == neighbor:
-                            interface_name = interface['name']
-                            #print(f"{router.name}找到eBGP邻居对应接口: {interface_name}")
-                            break
-            
-                    config.append(f" passive-interface {interface_name}")
+                    for routeur in routers:
+                        if routeur.name == neighbor:
+                            for interface in routeur.interfaces:
+                                if interface['neighbor'] == myself:
+                                    neighbor_ip = interface['ipv6_address']
+                                    print(f"找到邻居ip了{neighbor_ip}")
+                                    break
 
 
-    # 如果找到邻居(找不到)
-    if neighbor:
-        for routeur in routers:
-            if routeur.name == neighbor:
-                for interface in routeur.interfaces:
-                    if interface['neighbor'] == myself:
-                        neighbor_ip = interface['ipv6_address']
-                        print(f"找到邻居ip了{neighbor_ip}")
-                        break
-
-
-        if neighbor_ip:
-            as_number = routers_dict[neighbor]['AS']
-            config.append(f" neighbor {neighbor_ip} remote-as {as_number}")
+                    if neighbor_ip:
+                        as_number = routers_dict[neighbor]['AS']
+                        config.append(f" neighbor {neighbor_ip} remote-as {as_number}")
 
 
 
@@ -159,11 +144,22 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     config.append(" address-family ipv6")
 
     # Announce neighbor subnet
+    networks = []
     for interface in router.interfaces:
         ip_addr = interface.get('ipv6_address', '')
         if ip_addr:
-            network = ip_addr[:-4]+ip_addr[-3:]
-            config.append(f"  network {network}")
+            try:
+                network = ipaddress.IPv6Network(ip_addr, strict=False)
+                networks.append(network)
+            except ValueError:
+                print(f"无效的 IPv6 地址: {ip_addr}")
+
+    # Sort subnet
+    networks.sort(key=lambda net: (net.network_address, net.prefixlen))
+
+    # Add subnets to configuration
+    for network in networks:
+        config.append(f"  network {str(network)}")
 
     # Activate neighbor IP loopback
     for ip_neighbor in neighbor_liste:
@@ -234,7 +230,7 @@ def config_end(protocol, router_id, router, connections_matrix_name):
         "line vty 0 4",
         " login",
         "!\r!",
-        "end"
+        "end\r"
     ]
 
     config.extend(part)
