@@ -67,17 +67,18 @@ for as_index in all_as:
         config.extend(config_bgp(router, router_id, all_routers, connections_matrix_name, routers_info))
         config.extend(config_end(as_index.protocol, router_id, router, connections_matrix_name))
         
-        with open(f"i{router.name[1:]}_startup-config-new.cfg", 'w') as file:
+        with open(f"i{router.name[1:]}_startup-config.cfg", 'w') as file:
             file.write('\n'.join(config))
-            source_file.append(f"i{router.name[1:]}_startup-config-new.cfg")
+            source_file.append(f"i{router.name[1:]}_startup-config.cfg")
 
 
-"""
+
 # Move intent files to GNS3's directory
-i,j = 0
+i = 0
+j = 0
 
 while i < len(source_file) and j < len(target_directory):
     move_and_overwrite(source_file[i], target_directory[j])
     i += 1
     j += 1
-"""
+
