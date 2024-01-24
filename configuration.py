@@ -152,7 +152,7 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
                 network = ipaddress.IPv6Network(ip_addr, strict=False)
                 networks.append(network)
             except ValueError:
-                print(f"无效的 IPv6 地址: {ip_addr}")
+                print(f"Invalid IPv6 addresse: {ip_addr}")
 
     # Sort subnet
     networks.sort(key=lambda net: (net.network_address, net.prefixlen))
