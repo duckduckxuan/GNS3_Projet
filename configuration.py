@@ -1,20 +1,5 @@
 from allocate_addres import *
 
-"""
-# Reading the JSON file
-with open('router_info_full.json', 'r') as file:
-    auto_sys = json.load(file)
-
-# Generating configuration for each router
-for as_info in auto_sys['AS']:
-    config = generate_router_config(as_info)
-    with open(f"{as_info['routers']['name']}_config.cfg", 'w') as file:
-        file.write(config)
-
-"""
-
-
-
 # Configure head of file(已完成)
 def config_head(name):
     config = [
@@ -63,7 +48,7 @@ def config_loopback(ip_loopback, protocol):
 
 
 # Configure each interface(已完成)
-def config_interface(ipv6_address, interfaces, protocol):
+def config_interface(interfaces, protocol):
     config = []
     for interface in interfaces:
         config.append(f"interface {interface['name']}")
@@ -83,63 +68,86 @@ def config_interface(ipv6_address, interfaces, protocol):
             else:
                 config.append(" negotiation auto")
 
-            config.append(f" ipv6 address {ipv6_address}")
-            config.append(" ipv6 enable")
+            ipv6_address = interface.get('ipv6_address', '')  # Get the IPv6 address from the interface dict
+            if ipv6_address:
+                config.append(f" ipv6 address {ipv6_address}")
+                config.append(" ipv6 enable")
 
-            if protocol == "RIP":
-                config.append(" ipv6 rip 2001 enable")
-            if protocol == "OSPF":
-                config.append(" ipv6 ospf 2002 area 0")
+                if protocol == "RIP":
+                    config.append(" ipv6 rip 2001 enable")
+                elif protocol == "OSPF":  # Changed to elif for better practice
+                    config.append(" ipv6 ospf 2002 area 0")
+                else: # 如果eBGP就什么都不加
+                    pass
 
         config.append("!")
-        return config
+
+    return config  # Moved return statement outside the loop
+
 
 # Configure bgp neighbor(需要找到邻居的ip_loopback地址)(未完成)
 def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict):
     config = []
-    config.append(f"router bgp {router.number}")
+    current_as = routers_dict[router.name]['AS']
+
+    config.append(f"router bgp {current_as}")
     config.append(f" bgp router-id {router_id}")
     config.append(" bgp log-neighbor-changes")
     config.append(" no bgp default ipv4-unicast")
 
+    myself = None
+    neighbor = None
+    neighbor_ip = None
+
+    # eBGP(需要修改，现在显示不出来eBGP邻居端口ip地址)
     for elem in connections_matrix_name:
         ((r1, r2), state) = elem
+
         if state == 'border':
             if router.name == r1:
-                for interface in router.interfaces:
-                    if interface['neighbor'] == r2:
-                        neighbor = r2
-                        neighbor_interface = interface['neighbor_interface']
+                myself = r1
+                neighbor = r2
+                print(f"找到边界邻居: {neighbor}")
             elif router.name == r2:
-                for interface in router.interfaces:
-                    if interface['neighbor'] == r1:
-                        neighbor = r1
-                        neighbor_interface = interface['neighbor_interface']
-    for routeur in routers:
-        if routeur.name == neighbor:
-            for interface in routeur.interfaces:
-                if interface['name'] == neighbor_interface:
-                    ip_neighbor = routeur.interfaces['ipv6_address']
-    as_number = routers_dict[neighbor]['AS']
-    config.append(f" neighbor {ip_neighbor} remote-as {as_number}")
-    for routeur in routers_dict:
-        if routeur.key != router.name:
-            config.append(f" neighbor {routeur.value['loopback']} remote-as {routeur.value['AS']}")
-            config.append(f" neighbor {routeur.value['loopback']} update-source Loopback0")
+                myself = r2
+                neighbor = r1
+                print(f"找到边界邻居: {neighbor}")
+
+        for routeur in routers:
+            if routeur.name == neighbor:
+                for interface in routeur.interfaces:
+                    if interface['neighbor'] == myself:
+                        neighbor_ip = interface['ipv6_address']
+                        break
+                break
+
+        if neighbor_ip:
+            as_number = routers_dict[neighbor]['AS']
+            config.append(f" neighbor {neighbor_ip} remote-as {as_number}")
+
+    # iBGP
+    for routeur_name, routeur_info in routers_dict.items():
+        if routeur_name != router.name and routeur_info['AS'] == current_as:
+            config.append(f" neighbor {routeur_info['loopback']} remote-as {routeur_info['AS']}")
+            config.append(f" neighbor {routeur_info['loopback']} update-source Loopback0")
+
     config.append(" !")
     config.append(" address-family ipv4")
     config.append(" exit-address-family")
     config.append(" !")
     config.append(" address-family ipv6")
+    # 添加子网掩码
+    # 激活所有邻居
+    config.append(" exit-address-family")
+    config.append("!")
+
     return config
 
-   
-"""        
-# Configure the first part of ending infomation(未完成)
-def config_end():
+      
+# Configure end of file(未完成)
+def config_end(protocol, router_id, routers):
     config = []
     part1 = [
-        "!",
         "ip forward-protocol nd",
         "!\r!",
         "no ip http server",
@@ -151,18 +159,19 @@ def config_end():
         config.append(i)
 
     # Configure part of protocol
-    if router_info['name'] in rip:
+    if protocol == "RIP":
         config.append("ipv6 router rip 2001")
         config.append(" redistribute connected")
-    else:
+    if protocol == "OSPF":
         config.append("ipv6 router ospf 2002")
-        config.append(f" router-id {router_info['id']}") # json文件里加router id (待完成)
+        config.append(f" router-id {router_id}")
 
-    if router_info['name']=="R8":
-        config.append(" passive-interface GigabitEthernet1/0")
-
-    if router_info['name']=="R9":
-        config.append(" passive-interface FastEthernet0/0")
+    if protocol == "OSPF":
+        for router in routers:
+            if router.router_type == "eBGP":
+                # 找到eBGP端口名称
+                pass
+        #config.append(f" passive-interface {interface}")
 
     part2 = [
         "!\r"*3 + "!",
@@ -181,9 +190,10 @@ def config_end():
         "line vty 0 4",
         " login",
         "!\r!",
-        "end\r"
+        "end"
     ]
 
     for i in part2:
         config.append(i)
-"""
+
+    return config
