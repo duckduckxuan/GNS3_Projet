@@ -26,11 +26,11 @@ connection_counts = {"111": 0, "112": 0, "border": 0}
 for conn in connections_matrix:
     connection_counts[conn[1]] += 1
 
-
+"""
 with open('router_configs.txt', "w") as file:
     for as_obj in all_as:
         file.write(str(as_obj) + "\n\n")
-
+"""
 """
 with open('router_configs.txt', "w") as file:
     for as_index in all_as:
