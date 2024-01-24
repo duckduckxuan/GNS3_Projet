@@ -6,14 +6,7 @@ from configuration import *
 
 
 def move_and_overwrite(source_file, target_directory):
-    # 检查目标文件夹是否存在，如果不存在则创建
-    if not os.path.exists(target_directory):
-        os.makedirs(target_directory)
-
-    # 构建目标文件路径
     target_file = os.path.join(target_directory, os.path.basename(source_file))
-
-    # 移动文件，如果目标文件存在则覆盖
     shutil.move(source_file, target_file)
 
 
