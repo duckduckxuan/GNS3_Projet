@@ -36,17 +36,7 @@ def config_interface(interfaces, protocol, router, connections_matrix_name):
         if interface['neighbor'] == "None":
             config.append("shutdown")
 
-            if interface['name'] == "FastEthernet0/0":
-                config.append("duplex full")
-            else:
-                config.append("negotiation auto")
-
         else:
-            if interface['name'] == "FastEthernet0/0":
-                config.append("duplex full")
-            else:
-                config.append("negotiation auto")
-
             ipv6_address = interface.get('ipv6_address', '')  # Get the IPv6 address from the interface dict
 
             if ipv6_address:
@@ -70,13 +60,46 @@ def config_interface(interfaces, protocol, router, connections_matrix_name):
                     config.append('conf t')
                     config.append("ipv6 router ospf 2002")
                     config.append(f"router-id {router.name[1:]}.{router.name[1:]}.{router.name[1:]}.{router.name[1:]}")
+                    
                     config.append("end")
 
                     config.append("conf t")
                     config.append(f"interface {interface['name']}")
-                    config.append(" ipv6 ospf 2002 area 0")
+                    config.append("ipv6 ospf 2002 area 0")
 
         config.append("end")
+
+
+
+    # passive interface ospf eBGP
+    if protocol == "OSPF" and router.router_type == "eBGP":
+        interface_name = None
+        
+        for elem in connections_matrix_name:
+            ((r1, r2), state) = elem
+
+            if state == 'border':
+                if router.name == r1:
+                    neighbor = r2
+                elif router.name == r2:
+                    neighbor = r1
+                else:
+                    neighbor = None
+
+                if neighbor:
+                    for interface in router.interfaces:
+                        if interface['neighbor'] == neighbor:
+                            interface_name = interface['name']
+                            #print(f"{router.name}找到eBGP邻居对应接口: {interface_name}")
+                            break
+                    
+                    config.append("conf t")
+                    config.append("ipv6 router ospf 2002")
+                    config.append(f"passive-interface {interface_name}")
+                    config.append("end")
+
+
+
 
     return config  # Moved return statement outside the loop
 
@@ -87,10 +110,10 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     current_as = routers_dict[router.name]['AS']
     neighbor_liste = []
 
+    config.append("conf t")
     config.append(f"router bgp {current_as}")
-    config.append(f" bgp router-id {router_id}")
-    config.append(" bgp log-neighbor-changes")
-    config.append(" no bgp default ipv4-unicast")
+    config.append(f"bgp router-id {router_id}")
+    config.append("no bgp default ipv4-unicast")
 
     if router.router_type == "eBGP":
         neighbor_ip = None
@@ -118,20 +141,17 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
 
                     if neighbor_ip:
                         as_number = routers_dict[neighbor]['AS']
-                        config.append(f" neighbor {neighbor_ip[:-3]} remote-as {as_number}")
+                        config.append(f"neighbor {neighbor_ip[:-3]} remote-as {as_number}")
                         neighbor_liste.append(neighbor_ip[:-3])
 
     for routeur_name, routeur_info in routers_dict.items():
         if routeur_name != router.name and routeur_info['AS'] == current_as:
-            config.append(f" neighbor {routeur_info['loopback'][:-4]} remote-as {routeur_info['AS']}")
-            config.append(f" neighbor {routeur_info['loopback'][:-4]} update-source Loopback0")
+            config.append(f"neighbor {routeur_info['loopback'][:-4]} remote-as {routeur_info['AS']}")
+            config.append(f"neighbor {routeur_info['loopback'][:-4]} update-source Loopback0")
             neighbor_liste.append(routeur_info['loopback'][:-4])
 
-    config.append(" !")
-    config.append(" address-family ipv4")
-    config.append(" exit-address-family")
-    config.append(" !")
-    config.append(" address-family ipv6")
+
+    config.append("address-family ipv6 unicast")
 
     # Announce neighbor subnet
     networks = []
@@ -149,14 +169,13 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
 
     # Add subnets to configuration
     for network in networks:
-        config.append(f"  network {str(network)}")
+        config.append(f"network {str(network)}")
 
     # Activate neighbor IP loopback
     for ip_neighbor in neighbor_liste:
-        config.append(f"  neighbor {ip_neighbor} activate")
+        config.append(f"neighbor {ip_neighbor} activate")
 
-    config.append(" exit-address-family")
-    config.append("!")
+    config.append("end")
 
     return config
 
