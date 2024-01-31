@@ -53,6 +53,13 @@ def config_interface(interfaces, protocol, router, connections_matrix_name):
     config = []
     for interface in interfaces:
         config.append(f"interface {interface['name']}")
+
+        if protocol == "OSPF":
+
+            if interface['cost'] != 0:
+                new_bandwidth = round(100000 / interface['cost'])
+                config.append(f"bandwidth {new_bandwidth}")
+
         config.append(" no ip address")
 
         if interface['neighbor'] == "None":

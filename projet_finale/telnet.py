@@ -37,7 +37,7 @@ def telnet_write(config,port):
             time.sleep(0.01)
 
         time.sleep(1)
-        
+
         #tn.write(b"write\r\r")
 
     except Exception as e:
@@ -47,7 +47,7 @@ get_nodes("TEMPLATE GNS3")
 #print(nodes_ports)
 
 
-with open('projet_finale/router_infos_TBD.json', 'r') as file:
+with open('router_infos_TBD.json', 'r') as file:
     data = json.load(file)
 
 all_as = [AS(as_info['number'], as_info['IP_range'], as_info['loopback_range'], as_info['protocol'], as_info['routers']) 

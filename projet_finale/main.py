@@ -77,9 +77,10 @@ for as_index in all_as:
 # Move intent files to GNS3's directory
 i = 0
 j = 0
-"""
+
+
 while i < len(source_file) and j < len(target_directory):
     move_and_overwrite(source_file[i], target_directory[j])
     i += 1
     j += 1
-"""
+
