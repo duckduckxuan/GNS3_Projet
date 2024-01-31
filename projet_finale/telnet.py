@@ -37,7 +37,8 @@ def telnet_write(config,port):
             time.sleep(0.01)
 
         time.sleep(1)
-        tn.write(b"write\r\r")
+        
+        #tn.write(b"write\r\r")
 
     except Exception as e:
         print(f"Error: {e}")
