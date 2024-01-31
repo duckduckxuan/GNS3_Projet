@@ -16,6 +16,7 @@ Attention: Le projet GNS3 doit être nommé "gns3_final"
 ### Dans Projet_finale:
 
 router_infos_TBD.json -> Le json contenant les informations sur le réseau.
+
 allocate_addres.py -> Assigne les addresses IP automatiquement et contient les classes Router et AS.
 configuration.py -> Contient les fonctions pour le drag & drop bot.
 main.py -> Script exécutable du drag & drop bot.
