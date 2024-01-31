@@ -202,21 +202,25 @@
                     "interfaces": [
                         {
                             "name": "FastEthernet0/0",
+                            "cost": 3,
                             "neighbor": "R10",
                             "neighbor_interface": "FastEthernet0/0"
                         },
                         {
                             "name": "GigabitEthernet1/0",
+                            "cost": 1,
                             "neighbor": "R6",
                             "neighbor_interface": "GigabitEthernet1/0"
                         },
                         {
                             "name": "GigabitEthernet2/0",
+                            "cost": 10,
                             "neighbor": "R11",
                             "neighbor_interface": "GigabitEthernet2/0"
                         },
                         {
                             "name": "GigabitEthernet3/0",
+                            "cost": 0,
                             "neighbor": "None",
                             "neighbor_interface": "None"
                         }
@@ -228,21 +232,25 @@
                     "interfaces": [
                         {
                             "name": "FastEthernet0/0",
+                            "cost": 4,
                             "neighbor": "R7",
                             "neighbor_interface": "FastEthernet0/0"
                         },
                         {
                             "name": "GigabitEthernet1/0",
+                            "cost": 2,
                             "neighbor": "R11",
                             "neighbor_interface": "GigabitEthernet1/0"
                         },
                         {
                             "name": "GigabitEthernet2/0",
+                            "cost": 5,
                             "neighbor": "R10",
                             "neighbor_interface": "GigabitEthernet2/0"
                         },
                         {
                             "name": "GigabitEthernet3/0",
+                            "cost": 0,
                             "neighbor": "None",
                             "neighbor_interface": "None"
                         }
@@ -254,21 +262,25 @@
                     "interfaces": [
                         {
                             "name": "FastEthernet0/0",
+                            "cost": 3,
                             "neighbor": "R8",
                             "neighbor_interface": "FastEthernet0/0"
                         },
                         {
                             "name": "GigabitEthernet1/0",
+                            "cost": 2,
                             "neighbor": "R12",
                             "neighbor_interface": "GigabitEthernet1/0"
                         },
                         {
                             "name": "GigabitEthernet2/0",
+                            "cost": 7,
                             "neighbor": "R9",
                             "neighbor_interface": "GigabitEthernet2/0"
                         },
                         {
                             "name": "GigabitEthernet3/0",
+                            "cost": 3,
                             "neighbor": "R11",
                             "neighbor_interface": "GigabitEthernet3/0"
                         }
@@ -280,21 +292,25 @@
                     "interfaces": [
                         {
                             "name": "FastEthernet0/0",
+                            "cost": 1,
                             "neighbor": "R13",
                             "neighbor_interface": "FastEthernet0/0"
                         },
                         {
                             "name": "GigabitEthernet1/0",
+                            "cost": 3,
                             "neighbor": "R9",
                             "neighbor_interface": "GigabitEthernet1/0"
                         },
                         {
                             "name": "GigabitEthernet2/0",
+                            "cost": 1,
                             "neighbor": "R8",
                             "neighbor_interface": "GigabitEthernet2/0"
                         },
                         {
                             "name": "GigabitEthernet3/0",
+                            "cost": 5,
                             "neighbor": "R10",
                             "neighbor_interface": "GigabitEthernet3/0"
                         }
@@ -306,21 +322,25 @@
                     "interfaces": [
                         {
                             "name": "FastEthernet0/0",
+                            "cost": 2,
                             "neighbor": "R14",
                             "neighbor_interface": "FastEthernet0/0"
                         },
                         {
                             "name": "GigabitEthernet1/0",
+                            "cost": 4,
                             "neighbor": "R10",
                             "neighbor_interface": "GigabitEthernet1/0"
                         },
                         {
                             "name": "GigabitEthernet2/0",
+                            "cost": 3,
                             "neighbor": "R13",
                             "neighbor_interface": "GigabitEthernet2/0"
                         },
                         {
                             "name": "GigabitEthernet3/0",
+                            "cost": 0,
                             "neighbor": "None",
                             "neighbor_interface": "None"
                         }
@@ -332,21 +352,25 @@
                     "interfaces": [
                         {
                             "name": "FastEthernet0/0",
+                            "cost": 3,
                             "neighbor": "R11",
                             "neighbor_interface": "FastEthernet0/0"
                         },
                         {
                             "name": "GigabitEthernet1/0",
+                            "cost": 1,
                             "neighbor": "R14",
                             "neighbor_interface": "GigabitEthernet1/0"
                         },
                         {
                             "name": "GigabitEthernet2/0",
+                            "cost": 5,
                             "neighbor": "R12",
                             "neighbor_interface": "GigabitEthernet2/0"
                         },
                         {
                             "name": "GigabitEthernet3/0",
+                            "cost": 0,
                             "neighbor": "None",
                             "neighbor_interface": "None"
                         }
@@ -358,21 +382,25 @@
                     "interfaces": [
                         {
                             "name": "FastEthernet0/0",
+                            "cost": 1,
                             "neighbor": "R12",
                             "neighbor_interface": "FastEthernet0/0"
                         },
                         {
                             "name": "GigabitEthernet1/0",
+                            "cost": 4,
                             "neighbor": "R13",
                             "neighbor_interface": "GigabitEthernet1/0"
                         },
                         {
                             "name": "GigabitEthernet2/0",
+                            "cost": 0,
                             "neighbor": "None",
                             "neighbor_interface": "None"
                         },
                         {
                             "name": "GigabitEthernet3/0",
+                            "cost": 0,
                             "neighbor": "None",
                             "neighbor_interface": "None"
                         }

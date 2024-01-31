@@ -67,6 +67,11 @@ def config_interface(interfaces, protocol, router, connections_matrix_name):
                     config.append(f"interface {interface['name']}")
                     config.append("ipv6 ospf 2002 area 0")
 
+                    if interface['cost'] != 0:
+                        new_bandwidth = round(100000 / interface['cost'])
+                        config.append(f"bandwidth {new_bandwidth}")
+
+
         config.append("end")
 
 
