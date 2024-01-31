@@ -48,7 +48,7 @@ def config_loopback(ip_loopback, protocol):
     return config
 
 
-# Configure each interface(已完成)
+# Configure each interface
 def config_interface(interfaces, protocol, router, connections_matrix_name):
     config = []
     for interface in interfaces:
