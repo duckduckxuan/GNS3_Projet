@@ -1,10 +1,13 @@
 import gns3fy
-import json
-import time
 import telnetlib
+import time
+import json
+from allocate_addres import *
+from telnet_configuration import *
+
+
 
 nodes_ports = {}
-
 
 def get_nodes(project_name):
 
@@ -19,145 +22,70 @@ def get_nodes(project_name):
         node.get()
         nodes_ports[node.name] = node.console
 
-
-def config_loopback(router,protocol):
-    router_number = router["name"][1]
-
-    basic_config = f"""interface Loopback0\r
-                    no ip address\r
-                    ipv6 address 2001:DB8:{router_number}::1/128\r
-                    ipv6 enable\r"""
-    
-    if protocol == "RIP":
-        basic_config += "ipv6 rip 2001 enable\r"
-    elif protocol == "OSPF":
-        basic_config += "ipv6 ospf 2002 area 0\r"
-
-    return basic_config
-
-
-def config_interfaces(interface,protocol):
-    if interface["neighbor"] == "None":
-        no_neighbor = f"""interface {interface["name"]}\r
-                        no ip address\r
-                        shutdown\r
-                        negotiation auto\r"""
-        
-        return no_neighbor
-
-    else:
-        #TODO WHICH ADDRESS TO PUT
-        basic_config = f"""interface {interface["name"]}\r
-                            no ip address\r
-                            duplex full\r
-                            ipv6 address 2001:192:168:5::2/64\r
-                            ipv6 enable\r"""
-        
-        if protocol == "RIP":
-            basic_config += "ipv6 rip 2001 enable\r"
-        elif protocol == "OSPF":
-            basic_config += "ipv6 ospf 2002 area 0\r"
-
-        return basic_config
-        
-
-def config_bgp(router,as_number):
-    router_number = router["name"][1]
-
-    basic_config = f"""router bgp {as_number}\r
-                        bgp router-id {router_number}.{router_number}.{router_number}.{router_number}\r
-                        bgp log-neighbor-changes\r
-                        no bgp default ipv4-unicast\r"""
-    
-
-    if router["type"] == "eBGP":
-        if as_number == 111:
-            basic_config += """neighbor 2001:192:170:1::2 remote-as 112\r"""
-
-        else:
-            basic_config += """neighbor 2001:192:170:1::2 remote-as 111\r"""
-
-    if as_number == 111:
-
-        for i in range(1,8):
-            if i == int(router_number):
-                continue
-            
-            basic_config += f"""neighbor 2001:DB8:{i}::1 remote-as {as_number}\r
-                                neighbor 2001:DB8:{i}::1 update-source Loopback0\r"""
-            
-    elif as_number == 112:
-        for i in range(8,15):
-            if i == int(router_number):
-                continue
-
-            basic_config += f"""neighbor 2001:DB8:{i}::1 remote-as {as_number}\r
-                                neighbor 2001:DB8:{i}::1 update-source Loopback0\r"""
-            
-    
-    basic_config += """address-family ipv4\r
-                    exit-address-family\r
-                    address-family ipv6\r"""
-    
-
-    if as_number == 111:
-        for i in range(1,8):
-            if i == int(router_number):
-                continue
-
-            basic_config += f"""neighbor 2001:DB8:{i}::1 activate\r"""
-            
-    elif as_number == 112:
-        for i in range(8,15):
-            if i == int(router_number):
-                continue
-
-            basic_config += f"""neighbor 2001:DB8:{i}::1 activate\r"""
-
-
-    basic_config += """exit-address-family\r"""
-    
-
-    return basic_config
-
-
 def telnet_write(config,port):
     
     try:
         print(port)
         tn = telnetlib.Telnet('localhost',port)
         time.sleep(1)
-        tn.write(config)
+        tn.write(b"\r") #To start writing
         time.sleep(1)
-        tn.write(b"end\r")
+
+        for command in config:
+            tn.write(command.encode())
+            tn.write(b"\r")
+            time.sleep(0.01)
+
+        time.sleep(1)
+        tn.write(b"write\r\r")
 
     except Exception as e:
         print(f"Error: {e}")
 
-
 get_nodes("TEMPLATE GNS3")
-print(nodes_ports)
+#print(nodes_ports)
 
-with open('router_infos_test.json', 'r') as file:
+
+with open('projet_finale/router_infos_TBD.json', 'r') as file:
     data = json.load(file)
 
+all_as = [AS(as_info['number'], as_info['IP_range'], as_info['loopback_range'], as_info['protocol'], as_info['routers']) 
+          for as_info in data['AS']]
 
-for AutoSys in data["AS"]:
-    
-    as_number = int(AutoSys["number"])
-    protocol = AutoSys["protocol"]
+as_mapping = {}
+for as_index in all_as:
+    for router in as_index.routers:
+        as_mapping[router.name] = as_index.number
 
-    for router in AutoSys["routers"]:
-        config = ""
-        config += config_loopback(router,protocol)
+all_routers = [router for as_index in all_as for router in as_index.routers]
+connections_matrix_name = generate_connections_matrix_name(all_routers, as_mapping)
+#print(connections_matrix_name)
+connections_matrix = generate_connections_matrix(all_routers, as_mapping)
+routers_info = generate_routers_dict(all_as)
 
-        for interface in router["interfaces"]:
-            config += config_interfaces(interface,protocol)
-
-        config += config_bgp(router,as_number)
-
-        telnet_write(config.encode(), nodes_ports[router["name"]])
-
+connection_counts = {"111": 0, "112": 0, "border": 0}
+for conn in connections_matrix:
+    connection_counts[conn[1]] += 1
 
 
+for as_index in all_as:
+    for router in as_index.routers:
+        generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
 
+for as_index in all_as:
+    for router in as_index.routers:
+        router_loopback = generate_loopback(router.name, as_index.loopback_range)
+        router_id = generate_router_id(router.name)
+        config = []
+
+
+        config.extend(config_loopback(router_loopback, as_index.protocol))
+        config.extend(config_interface(router.interfaces, as_index.protocol, router, connections_matrix_name))
+
+        config.extend(config_bgp(router, router_id, all_routers, connections_matrix_name, routers_info))
+
+        print(config)
+        telnet_write(config,nodes_ports[router.name])
+
+
+        
