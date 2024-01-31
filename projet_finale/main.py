@@ -26,6 +26,7 @@ all_routers = [router for as_index in all_as for router in as_index.routers]
 connections_matrix_name = generate_connections_matrix_name(all_routers, as_mapping)
 print(connections_matrix_name)
 connections_matrix = generate_connections_matrix(all_routers, as_mapping)
+print(connections_matrix)
 routers_info = generate_routers_dict(all_as)
 
 connection_counts = {"111": 0, "112": 0, "border": 0}
