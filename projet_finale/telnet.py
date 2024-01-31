@@ -21,6 +21,10 @@ def get_nodes(project_name):
     for node in projet.nodes:
         node.get()
         nodes_ports[node.name] = node.console
+        node.start()
+
+    print("Starting nodes takes 1 minutes. Go grab a coffee.")
+    time.sleep(60)
 
 def telnet_write(config,port):
     
@@ -38,12 +42,12 @@ def telnet_write(config,port):
 
         time.sleep(1)
 
-        #tn.write(b"write\r\r")
+        tn.write(b"write\r\r")
 
     except Exception as e:
         print(f"Error: {e}")
 
-get_nodes("TEMPLATE GNS3")
+get_nodes("gns3_final")
 #print(nodes_ports)
 
 
