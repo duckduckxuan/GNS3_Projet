@@ -19,7 +19,7 @@
         "drawings": [
             {
                 "drawing_id": "48f92cbb-1b91-4ea1-8373-199308b89f77",
-                "locked": false,
+                "locked": true,
                 "rotation": 0,
                 "svg": "<svg width=\"579\" height=\"385\"><rect width=\"579\" height=\"385\" fill=\"#ffffff\" fill-opacity=\"1.0\" stroke-width=\"2\" stroke=\"#000000\" /></svg>",
                 "x": -428,
@@ -28,27 +28,27 @@
             },
             {
                 "drawing_id": "2ae6d7d6-0c7f-46bb-b297-131eda18ee9f",
-                "locked": false,
+                "locked": true,
                 "rotation": 0,
-                "svg": "<svg width=\"48\" height=\"68\"><text font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\" fill=\"#000000\" fill-opacity=\"1.0\">AS 111\n\nRIP\n</text></svg>",
+                "svg": "<svg width=\"59\" height=\"76\"><text font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\" fill=\"#000000\" fill-opacity=\"1.0\">AS 111\n\nRIP\n</text></svg>",
                 "x": -400,
                 "y": -296,
                 "z": 2
             },
             {
                 "drawing_id": "05c14a3f-5c68-4b4f-8f93-5d89ba8b83e7",
-                "locked": false,
+                "locked": true,
                 "rotation": 0,
                 "svg": "<svg width=\"566\" height=\"386\"><rect width=\"566\" height=\"386\" fill=\"#ffffff\" fill-opacity=\"1.0\" stroke-width=\"2\" stroke=\"#000000\" /></svg>",
                 "x": 157,
-                "y": -326,
+                "y": -327,
                 "z": 0
             },
             {
                 "drawing_id": "71585d89-7f88-49de-aee7-0b5607bd7bde",
-                "locked": false,
+                "locked": true,
                 "rotation": 0,
-                "svg": "<svg width=\"48\" height=\"53\"><text font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\" fill=\"#000000\" fill-opacity=\"1.0\">AS 112\n\nOSPF</text></svg>",
+                "svg": "<svg width=\"59\" height=\"59\"><text font-family=\"TypeWriter\" font-size=\"10.0\" font-weight=\"bold\" fill=\"#000000\" fill-opacity=\"1.0\">AS 112\n\nOSPF</text></svg>",
                 "x": 647,
                 "y": -298,
                 "z": 2
@@ -776,7 +776,7 @@
                     "x": 22,
                     "y": -25
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R1",
                 "node_id": "5a0fd657-52da-4d82-a3af-7e02a2aa3d7b",
                 "node_type": "dynamips",
@@ -845,7 +845,7 @@
                     "x": 22,
                     "y": -25
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R2",
                 "node_id": "2ddf61d6-f681-417a-b5dd-509ac4c99dab",
                 "node_type": "dynamips",
@@ -914,7 +914,7 @@
                     "x": 21,
                     "y": 38
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R3",
                 "node_id": "48ebb1cc-8a28-4929-813c-6ad77f2f69ff",
                 "node_type": "dynamips",
@@ -980,10 +980,10 @@
                     "rotation": 0,
                     "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
                     "text": "R4",
-                    "x": 22,
-                    "y": -25
+                    "x": 288,
+                    "y": -23
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R4",
                 "node_id": "9d9d8a6c-60c8-4dce-990b-a335281c1f7b",
                 "node_type": "dynamips",
@@ -1052,7 +1052,7 @@
                     "x": 22,
                     "y": 38
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R5",
                 "node_id": "86d5d625-5d21-4018-af70-0aaf9ea40bbe",
                 "node_type": "dynamips",
@@ -1121,7 +1121,7 @@
                     "x": 22,
                     "y": -18
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R6",
                 "node_id": "bcc0cbae-307e-4ffd-97bd-59d7c4fa37ed",
                 "node_type": "dynamips",
@@ -1190,7 +1190,7 @@
                     "x": 21,
                     "y": -16
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R7",
                 "node_id": "4d565293-426d-4cb1-8041-b67726c5c161",
                 "node_type": "dynamips",
@@ -1259,7 +1259,7 @@
                     "x": 23,
                     "y": -17
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R8",
                 "node_id": "31888c72-49d0-4378-8294-27fa1ae77f9f",
                 "node_type": "dynamips",
@@ -1328,7 +1328,7 @@
                     "x": 22,
                     "y": -25
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R9",
                 "node_id": "74eb78d8-3e73-4879-ae7c-577fcd4f66f4",
                 "node_type": "dynamips",
@@ -1397,7 +1397,7 @@
                     "x": 17,
                     "y": -18
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R10",
                 "node_id": "45331f6d-d3f2-427b-a5e6-97300343897d",
                 "node_type": "dynamips",
@@ -1466,7 +1466,7 @@
                     "x": 21,
                     "y": 39
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R11",
                 "node_id": "5c562ef8-0ba4-41b9-a5ed-329d900cc3e3",
                 "node_type": "dynamips",
@@ -1535,7 +1535,7 @@
                     "x": 16,
                     "y": -17
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R12",
                 "node_id": "343be9c4-fcc7-4c16-a3a3-03a8d477e09b",
                 "node_type": "dynamips",
@@ -1604,7 +1604,7 @@
                     "x": 18,
                     "y": 39
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R13",
                 "node_id": "32b9c447-4652-4f82-be5a-96feafdba4e6",
                 "node_type": "dynamips",
@@ -1673,7 +1673,7 @@
                     "x": 18,
                     "y": -18
                 },
-                "locked": false,
+                "locked": true,
                 "name": "R14",
                 "node_id": "0611ba5c-e75a-4aab-9652-83885f48b5fb",
                 "node_type": "dynamips",
@@ -1732,5 +1732,5 @@
     "type": "topology",
     "variables": null,
     "version": "2.2.44.1",
-    "zoom": 84
+    "zoom": 119
 }

@@ -4,6 +4,7 @@ import time
 import json
 from allocate_addres import *
 from telnet_configuration import *
+import threading
 
 
 
@@ -23,8 +24,6 @@ def get_nodes(project_name):
         nodes_ports[node.name] = node.console
         node.start()
 
-    print("Starting nodes takes 1 minutes. Go grab a coffee.")
-    time.sleep(60)
 
 def telnet_write(config,port):
     
@@ -47,7 +46,22 @@ def telnet_write(config,port):
     except Exception as e:
         print(f"Error: {e}")
 
-get_nodes("gns3_final")
+
+def process_router(as_index, router, all_routers, connections_matrix_name, routers_info):
+    router_loopback = generate_loopback(router.name, as_index.loopback_range)
+    router_id = generate_router_id(router.name)
+    config = []
+
+    config.extend(config_loopback(router_loopback, as_index.protocol))
+    config.extend(config_interface(router.interfaces, as_index.protocol, router, connections_matrix_name))
+
+    config.extend(config_bgp(router, router_id, all_routers, connections_matrix_name, routers_info))
+
+    print(config)
+    telnet_write(config, nodes_ports[router.name])
+
+
+get_nodes("TEMPLATE GNS3")
 #print(nodes_ports)
 
 
@@ -77,20 +91,17 @@ for as_index in all_as:
     for router in as_index.routers:
         generate_interface_addresses(router.name, router.interfaces, connections_matrix, connection_counts)
 
+threads = []
 for as_index in all_as:
     for router in as_index.routers:
-        router_loopback = generate_loopback(router.name, as_index.loopback_range)
-        router_id = generate_router_id(router.name)
-        config = []
+        thread = threading.Thread(target=process_router, args=(as_index, router, all_routers, connections_matrix_name, routers_info))
+        thread.start()
+        threads.append(thread)
 
 
-        config.extend(config_loopback(router_loopback, as_index.protocol))
-        config.extend(config_interface(router.interfaces, as_index.protocol, router, connections_matrix_name))
 
-        config.extend(config_bgp(router, router_id, all_routers, connections_matrix_name, routers_info))
-
-        print(config)
-        telnet_write(config,nodes_ports[router.name])
+for thread in threads:
+    thread.join()
 
 
         
