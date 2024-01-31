@@ -1,7 +1,7 @@
 from allocate_addres import *
 import ipaddress
 
-# Configure head of file(已完成)
+# Configure head of file
 def config_head(name):
     config = [
         "!\r"*3,
@@ -31,7 +31,7 @@ def config_head(name):
     return config
 
 
-# Configure Loopback Interface(已完成)
+# Configure Loopback Interface
 def config_loopback(ip_loopback, protocol):
     config = []
     config.append("interface Loopback0")
@@ -48,7 +48,7 @@ def config_loopback(ip_loopback, protocol):
     return config
 
 
-# Configure each interface(已完成)
+# Configure each interface
 def config_interface(interfaces, protocol, router, connections_matrix_name):
     config = []
     for interface in interfaces:
@@ -115,9 +115,7 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
                         if routeur.name == neighbor:
                             for interface in routeur.interfaces:
                                 if interface['neighbor'] == router.name:
-                                    print(router.name)
                                     neighbor_ip = interface.get('ipv6_address', '')
-                                    print(f"找到邻居ip了{neighbor_ip}")
                                     break
 
                     if neighbor_ip:
@@ -138,22 +136,24 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     config.append(" address-family ipv6")
 
     # Announce neighbor subnet
-    networks = []
-    for interface in router.interfaces:
-        ip_addr = interface.get('ipv6_address', '')
-        if ip_addr:
-            try:
-                network = ipaddress.IPv6Network(ip_addr, strict=False)
-                networks.append(network)
-            except ValueError:
-                print(f"Invalid IPv6 addresse: {ip_addr}")
+    liste = list(routers_dict.keys())
+    if router.name == liste[0] or router.name == liste[-1]:
+        networks = []
+        for interface in router.interfaces:
+            ip_addr = interface.get('ipv6_address', '')
+            if ip_addr:
+                try:
+                    network = ipaddress.IPv6Network(ip_addr, strict=False)
+                    networks.append(network)
+                except ValueError:
+                    print(f"Invalid IPv6 addresse: {ip_addr}")
 
-    # Sort subnet
-    networks.sort(key=lambda net: (net.network_address, net.prefixlen))
+        # Sort subnet
+        networks.sort(key=lambda net: (net.network_address, net.prefixlen))
 
-    # Add subnets to configuration
-    for network in networks:
-        config.append(f"  network {str(network)}")
+        # Add subnets to configuration
+        for network in networks:
+            config.append(f"  network {str(network)}")
 
     # Activate neighbor IP loopback
     for ip_neighbor in neighbor_liste:
@@ -165,7 +165,7 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     return config
 
       
-# Configure end of file(已完成)
+# Configure end of file
 def config_end(protocol, router_id, router, connections_matrix_name):
     config = [
         "ip forward-protocol nd",
@@ -202,7 +202,6 @@ def config_end(protocol, router_id, router, connections_matrix_name):
                     for interface in router.interfaces:
                         if interface['neighbor'] == neighbor:
                             interface_name = interface['name']
-                            #print(f"{router.name}找到eBGP邻居对应接口: {interface_name}")
                             break
             
                     config.append(f" passive-interface {interface_name}")
