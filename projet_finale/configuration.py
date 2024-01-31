@@ -1,7 +1,7 @@
 from allocate_addres import *
 import ipaddress
 
-# Configure head of file(已完成)
+# Configure head of file
 def config_head(name):
     config = [
         "!\r"*3,
@@ -31,7 +31,7 @@ def config_head(name):
     return config
 
 
-# Configure Loopback Interface(已完成)
+# Configure Loopback Interface
 def config_loopback(ip_loopback, protocol):
     config = []
     config.append("interface Loopback0")
@@ -115,9 +115,7 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
                         if routeur.name == neighbor:
                             for interface in routeur.interfaces:
                                 if interface['neighbor'] == router.name:
-                                    print(router.name)
                                     neighbor_ip = interface.get('ipv6_address', '')
-                                    print(f"找到邻居ip了{neighbor_ip}")
                                     break
 
                     if neighbor_ip:
@@ -165,7 +163,7 @@ def config_bgp(router, router_id, routers, connections_matrix_name, routers_dict
     return config
 
       
-# Configure end of file(已完成)
+# Configure end of file
 def config_end(protocol, router_id, router, connections_matrix_name):
     config = [
         "ip forward-protocol nd",
@@ -202,7 +200,6 @@ def config_end(protocol, router_id, router, connections_matrix_name):
                     for interface in router.interfaces:
                         if interface['neighbor'] == neighbor:
                             interface_name = interface['name']
-                            #print(f"{router.name}找到eBGP邻居对应接口: {interface_name}")
                             break
             
                     config.append(f" passive-interface {interface_name}")
