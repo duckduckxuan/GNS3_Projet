@@ -4,7 +4,7 @@
 1. Cloner le projet avec `git clone https://github.com/duckduckxuan/GNS3_Projet`.
 2. Se placer dans le répértoire projet_finale avec `cd projet_finale`.
 3. Pour le drag and drop bot, utiliser `python3 main.py`.
-4. Pour le script telnet, ouvrir gns3_final avec gns3 puis utiliser `python3 telnet.py`.
+4. Pour le script telnet, ouvrir gns3_final avec gns3, start les routers attendre 1 minute puis utiliser `python3 telnet.py`.
 
 Attention: Le routeur ne doit pas avoir le message: "Would you like to enter the initial configuration dialog?".
 
